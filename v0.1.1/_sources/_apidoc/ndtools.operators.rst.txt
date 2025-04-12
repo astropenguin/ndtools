@@ -1,0 +1,7 @@
+ndtools.operators module
+========================
+
+.. automodule:: ndtools.operators
+   :members:
+   :undoc-members:
+   :show-inheritance:
