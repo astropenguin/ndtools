@@ -27,21 +27,20 @@ from ndtools import total_equality
 @total_equality
 class Even:
     def __eq__(self, array):
-        return ~((array % 2).astype(bool))
+        return array % 2 == 0
 
-even = Even()
-even == np.arange(3)  # -> array([True, False, True])
-even != np.arange(3)  # -> array([False, True, False])
+Even() == np.arange(3)  # -> array([True, False, True])
+Even() != np.arange(3)  # -> array([False, True, False])
 ```
 It also supports a more intuitive notation with the array written on the left-hand side and the object on the right-hand side:
 ```python
-np.arange(3) == even  # -> array([True, False, True])
-np.arange(3) != even  # -> array([False, True, False])
+np.arange(3) == Even()  # -> array([True, False, True])
+np.arange(3) != Even()  # -> array([False, True, False])
 ```
 
 `total_ordering` will fill in missing ordering operators (`__ge__`, `__gt__`, `__le__`, `__lt__`).
 As with [`functools.total_ordering`](https://docs.python.org/3/library/functools.html#functools.total_ordering), at least one of them, and `__eq__` or `__ne__` must be user-defined.
-The following example implements an interval object that defines equivalence with a certain range:
+The following example implements a range object that defines equivalence with a certain range:
 ```python
 import numpy as np
 from dataclasses import dataclass
@@ -49,7 +48,7 @@ from ndtools import total_ordering
 
 @dataclass
 @total_ordering
-class Interval:
+class Range:
     lower: float
     upper: float
 
@@ -59,13 +58,13 @@ class Interval:
     def __ge__(self, array):
         return array < self.upper
 
-Interval(1, 2) == np.arange(3)  # -> array([False, True, False])
-Interval(1, 2) < np.arange(3)   # -> array([False, False, True])
-Interval(1, 2) > np.arange(3)   # -> array([True, False, False])
+Range(1, 2) == np.arange(3)  # -> array([False, True, False])
+Range(1, 2) < np.arange(3)   # -> array([False, False, True])
+Range(1, 2) > np.arange(3)   # -> array([True, False, False])
 ```
 It also supports a more intuitive notation with the array written on the left-hand side and the object on the right-hand side:
 ```python
-np.arange(3) == Interval(1, 2) # -> array([False, True, False])
-np.arange(3) < Interval(1, 2)  # -> array([True, False, False])
-np.arange(3) > Interval(1, 2)  # -> array([False, False, True])
+np.arange(3) == Range(1, 2) # -> array([False, True, False])
+np.arange(3) < Range(1, 2)  # -> array([True, False, False])
+np.arange(3) > Range(1, 2)  # -> array([False, False, True])
 ```

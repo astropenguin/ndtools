@@ -12,7 +12,7 @@ def test_total_equality_by_eq() -> None:
     @total_equality
     class Even:
         def __eq__(self, array: Any) -> Any:
-            return ~((array % 2).astype(bool))
+            return array % 2 == 0
 
     left = np.arange(3)
     right: Any = Even()
@@ -26,7 +26,7 @@ def test_total_equality_by_ne() -> None:
     @total_equality
     class Even:
         def __ne__(self, array: Any) -> Any:
-            return (array % 2).astype(bool)
+            return array % 2 == 1
 
     left = np.arange(3)
     right: Any = Even()
@@ -39,7 +39,7 @@ def test_total_equality_by_ne() -> None:
 def test_total_ordering_by_ge() -> None:
     @dataclass
     @total_ordering
-    class Interval:
+    class Range:
         lower: Any
         upper: Any
 
@@ -50,7 +50,7 @@ def test_total_ordering_by_ge() -> None:
             return array < self.upper
 
     left = np.arange(3)
-    right: Any = Interval(1, 2)
+    right: Any = Range(1, 2)
     assert ((left == right) == np.array([False, True, False])).all()
     assert ((right == left) == np.array([False, True, False])).all()
     assert ((left != right) == np.array([True, False, True])).all()
@@ -68,7 +68,7 @@ def test_total_ordering_by_ge() -> None:
 def test_total_ordering_by_gt() -> None:
     @dataclass
     @total_ordering
-    class Interval:
+    class Range:
         lower: Any
         upper: Any
 
@@ -79,7 +79,7 @@ def test_total_ordering_by_gt() -> None:
             return array < self.lower
 
     left = np.arange(3)
-    right: Any = Interval(1, 2)
+    right: Any = Range(1, 2)
     assert ((left == right) == np.array([False, True, False])).all()
     assert ((right == left) == np.array([False, True, False])).all()
     assert ((left != right) == np.array([True, False, True])).all()
@@ -97,7 +97,7 @@ def test_total_ordering_by_gt() -> None:
 def test_total_ordering_by_le() -> None:
     @dataclass
     @total_ordering
-    class Interval:
+    class Range:
         lower: Any
         upper: Any
 
@@ -108,7 +108,7 @@ def test_total_ordering_by_le() -> None:
             return array >= self.lower
 
     left = np.arange(3)
-    right: Any = Interval(1, 2)
+    right: Any = Range(1, 2)
     assert ((left == right) == np.array([False, True, False])).all()
     assert ((right == left) == np.array([False, True, False])).all()
     assert ((left != right) == np.array([True, False, True])).all()
@@ -126,7 +126,7 @@ def test_total_ordering_by_le() -> None:
 def test_total_ordering_by_lt() -> None:
     @dataclass
     @total_ordering
-    class Interval:
+    class Range:
         lower: Any
         upper: Any
 
@@ -137,7 +137,7 @@ def test_total_ordering_by_lt() -> None:
             return array >= self.upper
 
     left = np.arange(3)
-    right: Any = Interval(1, 2)
+    right: Any = Range(1, 2)
     assert ((left == right) == np.array([False, True, False])).all()
     assert ((right == left) == np.array([False, True, False])).all()
     assert ((left != right) == np.array([True, False, True])).all()

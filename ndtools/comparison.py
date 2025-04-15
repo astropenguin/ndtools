@@ -61,6 +61,9 @@ def total_equality(cls: type[T], /) -> type[T]:
     Returns:
         The same class with missing multidimensional equality methods.
 
+    Raises:
+        ValueError: Raised if none of the equality operators (==, !=) is defined.
+
     Examples:
         ::
 
@@ -71,7 +74,7 @@ def total_equality(cls: type[T], /) -> type[T]:
             @total_equality
             class Even:
                 def __eq__(self, array):
-                    return ~((array % 2).astype(bool))
+                    return array % 2 == 0
 
 
             result = (np.arange(3) == Even())
@@ -115,6 +118,9 @@ def total_ordering(cls: type[T], /) -> type[T]:
     Returns:
         The same class with missing multidimensional ordering methods.
 
+    Raises:
+        ValueError: Raise if none of the ordering operator (>=, >, <=, <) is defined.
+
     Examples:
         ::
 
@@ -125,7 +131,7 @@ def total_ordering(cls: type[T], /) -> type[T]:
 
             @dataclass
             @total_ordering
-            class Interval:
+            class Range:
                 lower: float
                 upper: float
 
@@ -136,11 +142,11 @@ def total_ordering(cls: type[T], /) -> type[T]:
                     return array < self.upper
 
 
-            result = (np.arange(3) == Interval(1, 2))
+            result = (np.arange(3) == Range(1, 2))
             expected = np.array([False, True, False])
             assert (result == expected).all()
 
-            result = (np.arange(3) < Interval(1, 2))
+            result = (np.arange(3) < Range(1, 2))
             expected = np.array([True, False, False])
             assert (result == expected).all()
 
