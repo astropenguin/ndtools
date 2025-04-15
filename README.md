@@ -68,3 +68,6 @@ np.arange(3) == Range(1, 2) # -> array([False, True, False])
 np.arange(3) < Range(1, 2)  # -> array([True, False, False])
 np.arange(3) > Range(1, 2)  # -> array([False, False, True])
 ```
+
+> [!TIP]
+> Mix-in versions of them, `TotalEquality` and `TotalOrdering`, are also available.

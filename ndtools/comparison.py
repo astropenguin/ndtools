@@ -1,8 +1,8 @@
-__all__ = ["total_equality", "total_ordering"]
+__all__ = ["TotalEquality", "TotalOrdering", "total_equality", "total_ordering"]
 
 
 # standard library
-from typing import Any, TypeVar
+from typing import Any, Callable, TypeVar
 
 
 # dependencies
@@ -45,6 +45,88 @@ MISSINGS_ORDERING = {
         "__le__": op.le_by_lt,
     },
 }
+
+
+class TotalEquality:
+    """Mix-in class that fills in missing multidimensional equality methods.
+
+    Raises:
+        ValueError: Raised if none of the equality operators (==, !=) is defined.
+
+    Examples:
+        ::
+
+            import numpy as np
+            from ndtools import TotalEquality
+
+
+            class Even(TotalEquality):
+                def __eq__(self, array):
+                    return array % 2 == 0
+
+
+            result = (np.arange(3) == Even())
+            expected = np.array([True, False, True])
+            assert (result == expected).all()
+
+    """
+
+    __array_ufunc__: Callable[..., Any]
+    __eq__: Callable[..., Any]
+    __ne__: Callable[..., Any]
+
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        super().__init_subclass__(**kwargs)
+        total_equality(cls)
+
+
+class TotalOrdering:
+    """Mix-in class decorator that fills in missing multidimensional ordering methods.
+
+    Raises:
+        ValueError: Raise if none of the ordering operator (>=, >, <=, <) is defined.
+
+    Examples:
+        ::
+
+            import numpy as np
+            from dataclasses import dataclass
+            from ndtools import TotalOrdering
+
+
+            @dataclass
+            class Range(TotalOrdering):
+                lower: float
+                upper: float
+
+                def __eq__(self, array):
+                    return (array >= self.lower) & (array < self.upper)
+
+                def __ge__(self, array):
+                    return array < self.upper
+
+
+            result = (np.arange(3) == Range(1, 2))
+            expected = np.array([False, True, False])
+            assert (result == expected).all()
+
+            result = (np.arange(3) < Range(1, 2))
+            expected = np.array([True, False, False])
+            assert (result == expected).all()
+
+    """
+
+    __array_ufunc__: Callable[..., Any]
+    __eq__: Callable[..., Any]
+    __ge__: Callable[..., Any]
+    __gt__: Callable[..., Any]
+    __le__: Callable[..., Any]
+    __lt__: Callable[..., Any]
+    __ne__: Callable[..., Any]
+
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        super().__init_subclass__(**kwargs)
+        total_ordering(cls)
 
 
 def has_userattr(obj: Any, name: str, /) -> bool:

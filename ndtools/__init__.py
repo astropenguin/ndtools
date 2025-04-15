@@ -1,4 +1,11 @@
-__all__ = ["comparison", "operators", "total_equality", "total_ordering"]
+__all__ = [
+    "TotalEquality",
+    "TotalOrdering",
+    "comparison",
+    "operators",
+    "total_equality",
+    "total_ordering",
+]
 __version__ = "0.1.1"
 
 
