@@ -1,5 +1,12 @@
-__all__ = ["comparison", "operators", "total_equality", "total_ordering"]
-__version__ = "0.1.1"
+__all__ = [
+    "TotalEquality",
+    "TotalOrdering",
+    "comparison",
+    "operators",
+    "total_equality",
+    "total_ordering",
+]
+__version__ = "0.2.0"
 
 
 # dependencies
