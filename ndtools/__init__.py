@@ -6,7 +6,7 @@ __all__ = [
     "total_equality",
     "total_ordering",
 ]
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 
 # dependencies

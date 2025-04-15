@@ -1,6 +1,6 @@
 [project]
 name = "ndtools"
-version = "0.1.1"
+version = "0.2.0"
 description = "Collection of tools to extend multidimensional array operations"
 readme = "README.md"
 keywords = ["comparison", "duck-array", "ndarray"]
@@ -24,7 +24,7 @@ email = "taniguchi.akio@gmail.com"
 file = "LICENSE"
 
 [project.urls]
-homepage = "https://astropenguin.github.io/ndtools/v0.1.1"
+homepage = "https://astropenguin.github.io/ndtools/v0.2.0"
 repository = "https://github.com/astropenguin/ndtools"
 
 [dependency-groups]
