@@ -182,10 +182,11 @@ def total_equality(cls: type[T], /) -> type[T]:
     ) -> Any:
         if ufunc is np.equal:
             return self == inputs[0]
-        elif ufunc is np.not_equal:
+
+        if ufunc is np.not_equal:
             return self != inputs[0]
-        else:
-            return NotImplemented
+
+        super().__array_ufunc__(ufunc, method, *inputs, **kwargs)  # type: ignore
 
     setattr(cls, "__array_ufunc__", __array_ufunc__)
     return cls
@@ -252,18 +253,23 @@ def total_ordering(cls: type[T], /) -> type[T]:
     ) -> Any:
         if ufunc is np.equal:
             return self == inputs[0]
-        elif ufunc is np.greater:
+
+        if ufunc is np.greater:
             return self < inputs[0]
-        elif ufunc is np.greater_equal:
+
+        if ufunc is np.greater_equal:
             return self <= inputs[0]
-        elif ufunc is np.less:
+
+        if ufunc is np.less:
             return self > inputs[0]
-        elif ufunc is np.less_equal:
+
+        if ufunc is np.less_equal:
             return self >= inputs[0]
-        elif ufunc is np.not_equal:
+
+        if ufunc is np.not_equal:
             return self != inputs[0]
-        else:
-            return NotImplemented
+
+        super().__array_ufunc__(ufunc, method, *inputs, **kwargs)  # type: ignore
 
     setattr(cls, "__array_ufunc__", __array_ufunc__)
     return cls
