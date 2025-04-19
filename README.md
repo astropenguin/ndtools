@@ -15,17 +15,16 @@ pip install ndtools
 
 ## Usage
 
-### Comparison
+### Array comparison
 
-ndtools provides `total_equality` and `total_ordering` class decorators that fill in missing multidimensional equality and ordering methods, respectively.
-`total_equality` will fill in missing `__ne__` from user-defined `__eq__` or missing `__eq__` from user-defined `__ne__`.
-The following example implements an object that checks whether each array element is even or not:
+ndtools provides `TotalEquality` and `TotalOrdering` that implement missing equality and ordering operations for multidimensional arrays, respectively.
+`TotalEquality` will implement missing `__ne__` from user-defined `__eq__` or missing `__eq__` from user-defined `__ne__`.
+The following example implements an equatable object that checks whether each array element is even or not:
 ```python
 import numpy as np
-from ndtools import total_equality
+from ndtools import TotalEquality
 
-@total_equality
-class Even:
+class Even(TotalEquality):
     def __eq__(self, array):
         return array % 2 == 0
 
@@ -38,17 +37,16 @@ np.arange(3) == Even()  # -> array([True, False, True])
 np.arange(3) != Even()  # -> array([False, True, False])
 ```
 
-`total_ordering` will fill in missing ordering operators (`__ge__`, `__gt__`, `__le__`, `__lt__`).
-As with [`functools.total_ordering`](https://docs.python.org/3/library/functools.html#functools.total_ordering), at least one of them, and `__eq__` or `__ne__` must be user-defined.
-The following example implements a range object that defines equivalence with a certain range:
+`TotalOrdering` will implement missing ordering operators (`__ge__`, `__gt__`, `__le__`, `__lt__`).
+Similar to [`functools.total_ordering`](https://docs.python.org/3/library/functools.html#functools.total_ordering), at least one of them, and `__eq__` or `__ne__` must be user-defined.
+The following example implements an equatable object that defines equivalence with a certain range:
 ```python
 import numpy as np
 from dataclasses import dataclass
-from ndtools import total_ordering
+from ndtools import TotalOrdering
 
 @dataclass
-@total_ordering
-class Range:
+class Range(TotalOrdering)
     lower: float
     upper: float
 
@@ -69,5 +67,26 @@ np.arange(3) < Range(1, 2)  # -> array([True, False, False])
 np.arange(3) > Range(1, 2)  # -> array([False, False, True])
 ```
 
-> [!TIP]
-> Mix-in versions of them, `TotalEquality` and `TotalOrdering`, are also available.
+### Equatable combination
+
+ndtools provides `All`, `Any`, and `Combinable` that implement logical operations between equatable objects.
+Equatable classes that inherit from `Combinable` can perform logical operations between the class instance and other equatable object.
+Then ``instance & object`` will return ``All([instance, other])`` and ``instance | object`` will return ``Any[instance, other])``.
+
+```python
+from ndtools import Combinable, TotalEquality
+
+class Even(Combinable, TotalEquality):
+    def __eq__(self, array):
+        return array % 2 == 0
+
+class Odd(Combinable, TotalEquality):
+    def __eq__(self, array):
+        return array % 2 == 1
+
+Even() & Odd()  # -> All([Even(), Odd()])
+Even() | Odd()  # -> Any([Even(), Odd()])
+
+np.arange(3) == Even() & Odd()  # -> array([False, False, False])
+np.arange(3) == Even() | Odd()  # -> array([True, True, True])
+```
