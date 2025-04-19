@@ -69,7 +69,7 @@ class Combinable:
 class All(UserList[Any_], Combinable, Equatable):
     """Implement logical conjunction between equatables.
 
-    It should contain equatables like ``All([eqatable_0, equatable_1, ...]).
+    It should contain equatables like ``All([eqatable_0, equatable_1, ...])``.
     Then the equality operation on the target array will perform like
     ``(array == equatable_0) & array == equatable_1) & ...``.
 
@@ -108,7 +108,7 @@ class All(UserList[Any_], Combinable, Equatable):
 class Any(UserList[Any_], Combinable, Equatable):
     """Implement logical disjunction between equatables.
 
-    It should contain equatables like ``Any([eqatable_0, equatable_1, ...]).
+    It should contain equatables like ``Any([eqatable_0, equatable_1, ...])``.
     Then the equality operation on the target array will perform like
     ``(array == equatable_0) | array == equatable_1) & ...``.
 
