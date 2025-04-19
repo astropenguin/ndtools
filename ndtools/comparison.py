@@ -1,13 +1,14 @@
-__all__ = ["TotalEquality", "TotalOrdering", "total_equality", "total_ordering"]
+__all__ = ["TotalEquality", "TotalOrdering"]
 
 
 # standard library
-from typing import Any, Callable, TypeVar
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 
 # dependencies
-import numpy as np
 from . import operators as op
+from .abc import Equatable, Orderable
 
 
 # type hints
@@ -47,8 +48,8 @@ MISSINGS_ORDERING = {
 }
 
 
-class TotalEquality:
-    """Mix-in class that fills in missing multidimensional equality methods.
+class TotalEquality(Equatable):
+    """Implement missing equality operations for multidimensional arrays.
 
     Raises:
         ValueError: Raised if none of the equality operators (==, !=) is defined.
@@ -59,29 +60,36 @@ class TotalEquality:
             import numpy as np
             from ndtools import TotalEquality
 
-
             class Even(TotalEquality):
                 def __eq__(self, array):
                     return array % 2 == 0
 
+            Even() == np.arange(3)  # -> array([True, False, True])
+            np.arange(3) == Even()  # -> array([True, False, True])
 
-            result = (np.arange(3) == Even())
-            expected = np.array([True, False, True])
-            assert (result == expected).all()
+            Even() != np.arange(3)  # -> array([False, True, False])
+            np.arange(3) != Even()  # -> array([False, True, False])
 
     """
 
-    __array_ufunc__: Callable[..., Any]
     __eq__: Callable[..., Any]
     __ne__: Callable[..., Any]
+    __array_ufunc__: Callable[..., Any]
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
-        total_equality(cls)
+        defined = [name for name in MISSINGS_EQUALITY if has_usermethod(cls, name)]
+
+        if not defined:
+            raise ValueError("Define at least one equality operator (==, !=).")
+
+        for name, operator in MISSINGS_EQUALITY[defined[0]].items():
+            if not has_usermethod(cls, name):
+                setattr(cls, name, operator)
 
 
-class TotalOrdering:
-    """Mix-in class decorator that fills in missing multidimensional ordering methods.
+class TotalOrdering(Orderable):
+    """Implement missing ordering operations for multidimensional arrays.
 
     Raises:
         ValueError: Raise if none of the ordering operator (>=, >, <=, <) is defined.
@@ -92,7 +100,6 @@ class TotalOrdering:
             import numpy as np
             from dataclasses import dataclass
             from ndtools import TotalOrdering
-
 
             @dataclass
             class Range(TotalOrdering):
@@ -105,171 +112,57 @@ class TotalOrdering:
                 def __ge__(self, array):
                     return array < self.upper
 
+            Range(1, 2) == np.arange(3)  # -> array([False, True, False])
+            np.arange(3) == Range(1, 2)  # -> array([False, True, False])
 
-            result = (np.arange(3) == Range(1, 2))
-            expected = np.array([False, True, False])
-            assert (result == expected).all()
-
-            result = (np.arange(3) < Range(1, 2))
-            expected = np.array([True, False, False])
-            assert (result == expected).all()
+            Range(1, 2) >= np.arange(3)  # -> array([True, True, False])
+            np.arange(3) <= Range(1, 2)  # -> array([True, True, False])
 
     """
 
-    __array_ufunc__: Callable[..., Any]
     __eq__: Callable[..., Any]
     __ge__: Callable[..., Any]
     __gt__: Callable[..., Any]
     __le__: Callable[..., Any]
     __lt__: Callable[..., Any]
     __ne__: Callable[..., Any]
+    __array_ufunc__: Callable[..., Any]
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
-        total_ordering(cls)
+        defined = [name for name in MISSINGS_EQUALITY if has_usermethod(cls, name)]
+
+        if not defined:
+            raise ValueError("Define at least one equality operator (==, !=).")
+
+        for name, operator in MISSINGS_EQUALITY[defined[0]].items():
+            if not has_usermethod(cls, name):
+                setattr(cls, name, operator)
+
+        defined = [name for name in MISSINGS_ORDERING if has_usermethod(cls, name)]
+
+        if not defined:
+            raise ValueError("Define at least one ordering operator (>=, >, <=, <).")
+
+        for name, operator in MISSINGS_ORDERING[defined[0]].items():
+            if not has_usermethod(cls, name):
+                setattr(cls, name, operator)
 
 
-def has_userattr(obj: Any, name: str, /) -> bool:
-    """Check if an object has a used-defined attribute with given name."""
-    return getattr(obj, name, None) is not getattr(object, name, None)
+def has_usermethod(obj: Any, name: str, /) -> bool:
+    """Check if an object has a user-defined method with given name."""
+    return (
+        hasattr(obj, name)
+        and not is_abstractmethod(getattr(obj, name))
+        and not is_objectmethod(getattr(obj, name))
+    )
 
 
-def total_equality(cls: type[T], /) -> type[T]:
-    """Class decorator that fills in missing multidimensional equality methods.
-
-    Args:
-        cls: Class to be decorated.
-
-    Returns:
-        The same class with missing multidimensional equality methods.
-
-    Raises:
-        ValueError: Raised if none of the equality operators (==, !=) is defined.
-
-    Examples:
-        ::
-
-            import numpy as np
-            from ndtools import total_equality
+def is_abstractmethod(method: Any, /) -> bool:
+    """Check if given method is an abstract method."""
+    return bool(getattr(method, "__isabstractmethod__", None))
 
 
-            @total_equality
-            class Even:
-                def __eq__(self, array):
-                    return array % 2 == 0
-
-
-            result = (np.arange(3) == Even())
-            expected = np.array([True, False, True])
-            assert (result == expected).all()
-
-    """
-    defined = [name for name in MISSINGS_EQUALITY if has_userattr(cls, name)]
-
-    if not defined:
-        raise ValueError("Define at least one equality operator (==, !=).")
-
-    for name, operator in MISSINGS_EQUALITY[defined[0]].items():
-        if not has_userattr(cls, name):
-            setattr(cls, name, operator)
-
-    def __array_ufunc__(
-        self: Any,
-        ufunc: np.ufunc,
-        method: str,
-        *inputs: Any,
-        **kwargs: Any,
-    ) -> Any:
-        if ufunc is np.equal:
-            return self == inputs[0]
-
-        if ufunc is np.not_equal:
-            return self != inputs[0]
-
-        super().__array_ufunc__(ufunc, method, *inputs, **kwargs)  # type: ignore
-
-    setattr(cls, "__array_ufunc__", __array_ufunc__)
-    return cls
-
-
-def total_ordering(cls: type[T], /) -> type[T]:
-    """Class decorator that fills in missing multidimensional ordering methods.
-
-    Args:
-        cls: Class to be decorated.
-
-    Returns:
-        The same class with missing multidimensional ordering methods.
-
-    Raises:
-        ValueError: Raise if none of the ordering operator (>=, >, <=, <) is defined.
-
-    Examples:
-        ::
-
-            import numpy as np
-            from dataclasses import dataclass
-            from ndtools import total_ordering
-
-
-            @dataclass
-            @total_ordering
-            class Range:
-                lower: float
-                upper: float
-
-                def __eq__(self, array):
-                    return (array >= self.lower) & (array < self.upper)
-
-                def __ge__(self, array):
-                    return array < self.upper
-
-
-            result = (np.arange(3) == Range(1, 2))
-            expected = np.array([False, True, False])
-            assert (result == expected).all()
-
-            result = (np.arange(3) < Range(1, 2))
-            expected = np.array([True, False, False])
-            assert (result == expected).all()
-
-    """
-    cls = total_equality(cls)
-    defined = [name for name in MISSINGS_ORDERING if has_userattr(cls, name)]
-
-    if not defined:
-        raise ValueError("Define at least one ordering operator (>=, >, <=, <).")
-
-    for name, operator in MISSINGS_ORDERING[defined[0]].items():
-        if not has_userattr(cls, name):
-            setattr(cls, name, operator)
-
-    def __array_ufunc__(
-        self: Any,
-        ufunc: np.ufunc,
-        method: str,
-        *inputs: Any,
-        **kwargs: Any,
-    ) -> Any:
-        if ufunc is np.equal:
-            return self == inputs[0]
-
-        if ufunc is np.greater:
-            return self < inputs[0]
-
-        if ufunc is np.greater_equal:
-            return self <= inputs[0]
-
-        if ufunc is np.less:
-            return self > inputs[0]
-
-        if ufunc is np.less_equal:
-            return self >= inputs[0]
-
-        if ufunc is np.not_equal:
-            return self != inputs[0]
-
-        super().__array_ufunc__(ufunc, method, *inputs, **kwargs)  # type: ignore
-
-    setattr(cls, "__array_ufunc__", __array_ufunc__)
-    return cls
+def is_objectmethod(method: Any, /) -> bool:
+    """Check if given method is defined in the object class."""
+    return method is getattr(object, method.__name__, None)
