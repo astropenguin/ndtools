@@ -1,0 +1,7 @@
+ndtools.combination module
+==========================
+
+.. automodule:: ndtools.combination
+   :members:
+   :undoc-members:
+   :show-inheritance:
