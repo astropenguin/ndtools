@@ -14,10 +14,10 @@ def test_TotalEquality_by_eq() -> None:
             return array % 2 == 0
 
     left, right = np.arange(3), Even()
-    assert ((left == right) == np.array([True, False, True])).all()
-    assert ((right == left) == np.array([True, False, True])).all()
-    assert ((left != right) == ~np.array([True, False, True])).all()
-    assert ((right != left) == ~np.array([True, False, True])).all()
+    assert all((left == right) == np.array([True, False, True]))
+    assert all((right == left) == np.array([True, False, True]))
+    assert all((left != right) == ~np.array([True, False, True]))
+    assert all((right != left) == ~np.array([True, False, True]))
 
 
 def test_TotalEquality_by_ne() -> None:
@@ -26,10 +26,10 @@ def test_TotalEquality_by_ne() -> None:
             return array % 2 == 1
 
     left, right = np.arange(3), Even()
-    assert ((left == right) == np.array([True, False, True])).all()
-    assert ((right == left) == np.array([True, False, True])).all()
-    assert ((left != right) == ~np.array([True, False, True])).all()
-    assert ((right != left) == ~np.array([True, False, True])).all()
+    assert all((left == right) == np.array([True, False, True]))
+    assert all((right == left) == np.array([True, False, True]))
+    assert all((left != right) == ~np.array([True, False, True]))
+    assert all((right != left) == ~np.array([True, False, True]))
 
 
 def test_TotalOrdering_by_ge() -> None:
@@ -45,18 +45,18 @@ def test_TotalOrdering_by_ge() -> None:
             return array < self.upper
 
     left, right = np.arange(3), Range(1, 2)
-    assert ((left == right) == np.array([False, True, False])).all()
-    assert ((right == left) == np.array([False, True, False])).all()
-    assert ((left != right) == np.array([True, False, True])).all()
-    assert ((right != left) == np.array([True, False, True])).all()
-    assert ((left >= right) == np.array([False, True, True])).all()
-    assert ((right <= left) == np.array([False, True, True])).all()
-    assert ((left > right) == np.array([False, False, True])).all()
-    assert ((right < left) == np.array([False, False, True])).all()
-    assert ((left <= right) == np.array([True, True, False])).all()
-    assert ((right >= left) == np.array([True, True, False])).all()
-    assert ((left < right) == np.array([True, False, False])).all()
-    assert ((right > left) == np.array([True, False, False])).all()
+    assert all((left == right) == np.array([False, True, False]))
+    assert all((right == left) == np.array([False, True, False]))
+    assert all((left != right) == np.array([True, False, True]))
+    assert all((right != left) == np.array([True, False, True]))
+    assert all((left >= right) == np.array([False, True, True]))
+    assert all((right <= left) == np.array([False, True, True]))
+    assert all((left > right) == np.array([False, False, True]))
+    assert all((right < left) == np.array([False, False, True]))
+    assert all((left <= right) == np.array([True, True, False]))
+    assert all((right >= left) == np.array([True, True, False]))
+    assert all((left < right) == np.array([True, False, False]))
+    assert all((right > left) == np.array([True, False, False]))
 
 
 def test_TotalOrdering_by_gt() -> None:
@@ -72,18 +72,18 @@ def test_TotalOrdering_by_gt() -> None:
             return array < self.lower
 
     left, right = np.arange(3), Range(1, 2)
-    assert ((left == right) == np.array([False, True, False])).all()
-    assert ((right == left) == np.array([False, True, False])).all()
-    assert ((left != right) == np.array([True, False, True])).all()
-    assert ((right != left) == np.array([True, False, True])).all()
-    assert ((left >= right) == np.array([False, True, True])).all()
-    assert ((right <= left) == np.array([False, True, True])).all()
-    assert ((left > right) == np.array([False, False, True])).all()
-    assert ((right < left) == np.array([False, False, True])).all()
-    assert ((left <= right) == np.array([True, True, False])).all()
-    assert ((right >= left) == np.array([True, True, False])).all()
-    assert ((left < right) == np.array([True, False, False])).all()
-    assert ((right > left) == np.array([True, False, False])).all()
+    assert all((left == right) == np.array([False, True, False]))
+    assert all((right == left) == np.array([False, True, False]))
+    assert all((left != right) == np.array([True, False, True]))
+    assert all((right != left) == np.array([True, False, True]))
+    assert all((left >= right) == np.array([False, True, True]))
+    assert all((right <= left) == np.array([False, True, True]))
+    assert all((left > right) == np.array([False, False, True]))
+    assert all((right < left) == np.array([False, False, True]))
+    assert all((left <= right) == np.array([True, True, False]))
+    assert all((right >= left) == np.array([True, True, False]))
+    assert all((left < right) == np.array([True, False, False]))
+    assert all((right > left) == np.array([True, False, False]))
 
 
 def test_TotalOrdering_by_le() -> None:
@@ -99,18 +99,18 @@ def test_TotalOrdering_by_le() -> None:
             return array >= self.lower
 
     left, right = np.arange(3), Range(1, 2)
-    assert ((left == right) == np.array([False, True, False])).all()
-    assert ((right == left) == np.array([False, True, False])).all()
-    assert ((left != right) == np.array([True, False, True])).all()
-    assert ((right != left) == np.array([True, False, True])).all()
-    assert ((left >= right) == np.array([False, True, True])).all()
-    assert ((right <= left) == np.array([False, True, True])).all()
-    assert ((left > right) == np.array([False, False, True])).all()
-    assert ((right < left) == np.array([False, False, True])).all()
-    assert ((left <= right) == np.array([True, True, False])).all()
-    assert ((right >= left) == np.array([True, True, False])).all()
-    assert ((left < right) == np.array([True, False, False])).all()
-    assert ((right > left) == np.array([True, False, False])).all()
+    assert all((left == right) == np.array([False, True, False]))
+    assert all((right == left) == np.array([False, True, False]))
+    assert all((left != right) == np.array([True, False, True]))
+    assert all((right != left) == np.array([True, False, True]))
+    assert all((left >= right) == np.array([False, True, True]))
+    assert all((right <= left) == np.array([False, True, True]))
+    assert all((left > right) == np.array([False, False, True]))
+    assert all((right < left) == np.array([False, False, True]))
+    assert all((left <= right) == np.array([True, True, False]))
+    assert all((right >= left) == np.array([True, True, False]))
+    assert all((left < right) == np.array([True, False, False]))
+    assert all((right > left) == np.array([True, False, False]))
 
 
 def test_TotalOrdering_by_lt() -> None:
@@ -126,15 +126,15 @@ def test_TotalOrdering_by_lt() -> None:
             return array >= self.upper
 
     left, right = np.arange(3), Range(1, 2)
-    assert ((left == right) == np.array([False, True, False])).all()
-    assert ((right == left) == np.array([False, True, False])).all()
-    assert ((left != right) == np.array([True, False, True])).all()
-    assert ((right != left) == np.array([True, False, True])).all()
-    assert ((left >= right) == np.array([False, True, True])).all()
-    assert ((right <= left) == np.array([False, True, True])).all()
-    assert ((left > right) == np.array([False, False, True])).all()
-    assert ((right < left) == np.array([False, False, True])).all()
-    assert ((left <= right) == np.array([True, True, False])).all()
-    assert ((right >= left) == np.array([True, True, False])).all()
-    assert ((left < right) == np.array([True, False, False])).all()
-    assert ((right > left) == np.array([True, False, False])).all()
+    assert all((left == right) == np.array([False, True, False]))
+    assert all((right == left) == np.array([False, True, False]))
+    assert all((left != right) == np.array([True, False, True]))
+    assert all((right != left) == np.array([True, False, True]))
+    assert all((left >= right) == np.array([False, True, True]))
+    assert all((right <= left) == np.array([False, True, True]))
+    assert all((left > right) == np.array([False, False, True]))
+    assert all((right < left) == np.array([False, False, True]))
+    assert all((left <= right) == np.array([True, True, False]))
+    assert all((right >= left) == np.array([True, True, False]))
+    assert all((left < right) == np.array([True, False, False]))
+    assert all((right > left) == np.array([True, False, False]))

@@ -5,7 +5,12 @@ description = "Collection of tools to extend multidimensional array operations"
 readme = "README.md"
 keywords = ["comparison", "duck-array", "ndarray"]
 requires-python = ">=3.9,<3.14"
-dependencies = ["numpy>=2.0,<3.0", "typing-extensions>=4.0,<5.0"]
+dependencies = [
+    "numpy>=1.23,<3.0",
+    "pandas>=1.4,<3.0",
+    "pandas-stubs>=1.4,<3.0",
+    "typing-extensions>=4.0,<5.0",
+]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
