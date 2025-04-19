@@ -1,6 +1,7 @@
 __all__ = [
     "All",
     "Any",
+    "Apply",
     "Combinable",
     "Equatable",
     "Range",

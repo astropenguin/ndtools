@@ -1,6 +1,11 @@
 # dependencies
 import numpy as np
-from ndtools import Range
+from ndtools import Apply, Range
+from numpy.char import isupper
+
+
+def test_Apply() -> None:
+    assert all((np.array(["A", "b"]) == Apply(isupper)) == np.array([True, False]))
 
 
 def test_Range_eq() -> None:

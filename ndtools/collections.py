@@ -1,14 +1,56 @@
-__all__ = ["Range"]
+__all__ = ["Apply", "Range"]
 
 
 # standard libary
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Literal
 
 
 # dependencies
 from .combination import Combinable
-from .comparison import TotalOrdering
+from .comparison import TotalEquality, TotalOrdering
+
+
+@dataclass(frozen=True)
+class Apply(Combinable, TotalEquality):
+    """Equatable that applies a boolean function for multidimensional arrays.
+
+    Args:
+        func: Boolean function that takes ``func(array, *args, **kwargs)``.
+        *args: Positional arguments to be passed to the function.
+        **kwargs: Keyword arguments to be passed to the function.
+
+    Examples:
+        ::
+
+            import numpy as np
+            from ndtools import Apply
+            from numpy.char import isupper
+
+            np.array(["A", "b"]) == Apply(isupper)  # -> array([True, False])
+
+    """
+
+    func: Callable[..., Any]
+    args: Any
+    kwargs: Any
+
+    def __init__(
+        self,
+        func: Callable[..., Any],
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
+        super().__setattr__("func", func)
+        super().__setattr__("args", args)
+        super().__setattr__("kwargs", kwargs)
+
+    def __eq__(self, array: Any) -> Any:
+        return self.func(array, *self.args, **self.kwargs)
+
+    def __repr__(self) -> str:
+        return f"Apply({self.func}, *{self.args}, **{self.kwargs})"
 
 
 @dataclass(frozen=True)
