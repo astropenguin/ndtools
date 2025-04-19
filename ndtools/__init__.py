@@ -4,6 +4,7 @@ __all__ = [
     "Apply",
     "Combinable",
     "Equatable",
+    "Match",
     "Range",
     "Orderable",
     "TotalEquality",

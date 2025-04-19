@@ -1,11 +1,15 @@
 # dependencies
 import numpy as np
-from ndtools import Apply, Range
+from ndtools import Apply, Match, Range
 from numpy.char import isupper
 
 
 def test_Apply() -> None:
     assert all((np.array(["A", "b"]) == Apply(isupper)) == np.array([True, False]))
+
+
+def test_Match() -> None:
+    assert all((np.array(["a", "aa"]) == Match("a+")) == np.array([True, True]))
 
 
 def test_Range_eq() -> None:

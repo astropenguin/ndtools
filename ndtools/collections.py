@@ -1,4 +1,4 @@
-__all__ = ["Apply", "Range"]
+__all__ = ["Apply", "Match", "Range"]
 
 
 # standard libary
@@ -8,6 +8,7 @@ from typing import Any, Literal
 
 
 # dependencies
+import pandas as pd
 from .combination import Combinable
 from .comparison import TotalEquality, TotalOrdering
 
@@ -51,6 +52,49 @@ class Apply(Combinable, TotalEquality):
 
     def __repr__(self) -> str:
         return f"Apply({self.func}, *{self.args}, **{self.kwargs})"
+
+
+@dataclass(frozen=True)
+class Match(Combinable, TotalEquality):
+    """Equatable that matches regular expression to each array element.
+
+    It uses ``pandas.Series.str.fullmatch`` so the same options are available.
+
+    Args:
+        pat: Character sequence or regular expression.
+        case: If True, case sensitive matching will be performed.
+        flags: Regular expression flags, e.g. ``re.IGNORECASE``.
+        na: Fill value for missing values.
+            The default value depends on data type of the array.
+            For object-dtype, ``numpy.nan`` will be used.
+            For ``StringDtype``, ``pandas.NA`` will be used.
+
+    Examples:
+        ::
+
+            import numpy as np
+            from ndtools import Match
+
+            np.array(["a", "aa"]) == Match("a+")  # -> array([True, True])
+
+    """
+
+    pat: str
+    case: bool = True
+    flags: int = 0
+    na: Any = None
+
+    def __eq__(self, array: Any) -> Any:
+        return (
+            pd.Series(array)
+            .str.fullmatch(  # type: ignore
+                pat=self.pat,
+                case=self.case,
+                flags=self.flags,
+                na=self.na,
+            )
+            .values
+        )
 
 
 @dataclass(frozen=True)
