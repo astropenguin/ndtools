@@ -37,12 +37,7 @@ class Apply(Combinable, TotalEquality):
     args: Any
     kwargs: Any
 
-    def __init__(
-        self,
-        func: Callable[..., Any],
-        *args: Any,
-        **kwargs: Any,
-    ) -> None:
+    def __init__(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> None:
         super().__setattr__("func", func)
         super().__setattr__("args", args)
         super().__setattr__("kwargs", kwargs)
@@ -86,13 +81,8 @@ class Match(Combinable, TotalEquality):
 
     def __eq__(self, array: Any) -> Any:
         return (
-            pd.Series(array)
-            .str.fullmatch(  # type: ignore
-                pat=self.pat,
-                case=self.case,
-                flags=self.flags,
-                na=self.na,
-            )
+            pd.Series(array)  # type: ignore
+            .str.fullmatch(self.pat, self.case, self.flags, self.na)
             .values
         )
 
