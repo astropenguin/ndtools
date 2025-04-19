@@ -28,6 +28,7 @@ class Combinable:
     Examples:
         ::
 
+            import numpy as np
             from ndtools import Combinable, Equatable
 
             class Even(Combinable, Equatable):
@@ -75,6 +76,7 @@ class All(UserList[Any_], Combinable, Equatable):
     Examples:
         ::
 
+            import numpy as np
             from ndtools import Combinable, Equatable
 
             class Even(Combinable, Equatable):
@@ -113,6 +115,7 @@ class Any(UserList[Any_], Combinable, Equatable):
     Examples:
         ::
 
+            import numpy as np
             from ndtools import Combinable, Equatable
 
             class Even(Combinable, Equatable):

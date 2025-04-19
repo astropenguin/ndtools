@@ -74,6 +74,7 @@ Equatable classes that inherit from `Combinable` can perform logical operations 
 Then ``instance & object`` will return ``All([instance, other])`` and ``instance | object`` will return ``Any[instance, other])``.
 
 ```python
+import numpy as np
 from ndtools import Combinable, TotalEquality
 
 class Even(Combinable, TotalEquality):
