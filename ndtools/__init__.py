@@ -10,8 +10,6 @@ __all__ = [
     "combination",
     "comparison",
     "operators",
-    "total_equality",
-    "total_ordering",
 ]
 __version__ = "0.2.0"
 

@@ -1,4 +1,4 @@
-__all__ = ["TotalEquality", "TotalOrdering", "total_equality", "total_ordering"]
+__all__ = ["TotalEquality", "TotalOrdering"]
 
 
 # standard library
@@ -49,7 +49,7 @@ MISSINGS_ORDERING = {
 
 
 class TotalEquality(Equatable):
-    """Mix-in class that fills in missing multidimensional equality methods.
+    """Implement missing equality operations for multidimensional arrays.
 
     Raises:
         ValueError: Raised if none of the equality operators (==, !=) is defined.
@@ -78,11 +78,18 @@ class TotalEquality(Equatable):
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
-        total_equality(cls)
+        defined = [name for name in MISSINGS_EQUALITY if has_usermethod(cls, name)]
+
+        if not defined:
+            raise ValueError("Define at least one equality operator (==, !=).")
+
+        for name, operator in MISSINGS_EQUALITY[defined[0]].items():
+            if not has_usermethod(cls, name):
+                setattr(cls, name, operator)
 
 
 class TotalOrdering(Orderable):
-    """Mix-in class decorator that fills in missing multidimensional ordering methods.
+    """Implement missing ordering operations for multidimensional arrays.
 
     Raises:
         ValueError: Raise if none of the ordering operator (>=, >, <=, <) is defined.
@@ -123,102 +130,23 @@ class TotalOrdering(Orderable):
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)
-        total_ordering(cls)
+        defined = [name for name in MISSINGS_EQUALITY if has_usermethod(cls, name)]
 
+        if not defined:
+            raise ValueError("Define at least one equality operator (==, !=).")
 
-def total_equality(cls: type[T], /) -> type[T]:
-    """Class decorator that fills in missing multidimensional equality methods.
+        for name, operator in MISSINGS_EQUALITY[defined[0]].items():
+            if not has_usermethod(cls, name):
+                setattr(cls, name, operator)
 
-    Args:
-        cls: Class to be decorated.
+        defined = [name for name in MISSINGS_ORDERING if has_usermethod(cls, name)]
 
-    Returns:
-        The same class with missing multidimensional equality methods.
+        if not defined:
+            raise ValueError("Define at least one ordering operator (>=, >, <=, <).")
 
-    Raises:
-        ValueError: Raised if none of the equality operators (==, !=) is defined.
-
-    Examples:
-        ::
-
-            import numpy as np
-            from ndtools import total_equality
-
-            @total_equality
-            class Even:
-                def __eq__(self, array):
-                    return array % 2 == 0
-
-            Even() == np.arange(3)  # -> array([True, False, True])
-            np.arange(3) == Even()  # -> array([True, False, True])
-
-            Even() != np.arange(3)  # -> array([False, True, False])
-            np.arange(3) != Even()  # -> array([False, True, False])
-
-    """
-    defined = [name for name in MISSINGS_EQUALITY if has_usermethod(cls, name)]
-
-    if not defined:
-        raise ValueError("Define at least one equality operator (==, !=).")
-
-    for name, operator in MISSINGS_EQUALITY[defined[0]].items():
-        if not has_usermethod(cls, name):
-            setattr(cls, name, operator)
-
-    setattr(cls, "__array_ufunc__", Equatable.__array_ufunc__)
-    return cls
-
-
-def total_ordering(cls: type[T], /) -> type[T]:
-    """Class decorator that fills in missing multidimensional ordering methods.
-
-    Args:
-        cls: Class to be decorated.
-
-    Returns:
-        The same class with missing multidimensional ordering methods.
-
-    Raises:
-        ValueError: Raise if none of the ordering operator (>=, >, <=, <) is defined.
-
-    Examples:
-        ::
-
-            import numpy as np
-            from dataclasses import dataclass
-            from ndtools import total_ordering
-
-            @dataclass
-            @total_ordering
-            class Range:
-                lower: float
-                upper: float
-
-                def __eq__(self, array):
-                    return (array >= self.lower) & (array < self.upper)
-
-                def __ge__(self, array):
-                    return array < self.upper
-
-            Range(1, 2) == np.arange(3)  # -> array([False, True, False])
-            np.arange(3) == Range(1, 2)  # -> array([False, True, False])
-
-            Range(1, 2) >= np.arange(3)  # -> array([True, True, False])
-            np.arange(3) <= Range(1, 2)  # -> array([True, True, False])
-
-    """
-    total_equality(cls)
-    defined = [name for name in MISSINGS_ORDERING if has_usermethod(cls, name)]
-
-    if not defined:
-        raise ValueError("Define at least one ordering operator (>=, >, <=, <).")
-
-    for name, operator in MISSINGS_ORDERING[defined[0]].items():
-        if not has_usermethod(cls, name):
-            setattr(cls, name, operator)
-
-    setattr(cls, "__array_ufunc__", Orderable.__array_ufunc__)
-    return cls
+        for name, operator in MISSINGS_ORDERING[defined[0]].items():
+            if not has_usermethod(cls, name):
+                setattr(cls, name, operator)
 
 
 def has_usermethod(obj: Any, name: str, /) -> bool:
