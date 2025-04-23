@@ -16,5 +16,4 @@ __version__ = "0.3.0"
 
 # dependencies
 from . import comparison
-from .comparison.collections import *
-from .comparison.comparable import *
+from .comparison import *
