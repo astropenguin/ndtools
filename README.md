@@ -39,7 +39,7 @@ np.arange(3) != Even()  # -> array([False, True, False])
 
 `TotalOrdering` will implement missing ordering operators (`__ge__`, `__gt__`, `__le__`, `__lt__`).
 Similar to [`functools.total_ordering`](https://docs.python.org/3/library/functools.html#functools.total_ordering), at least one of them, and `__eq__` or `__ne__` must be user-defined.
-The following example implements an equatable object that defines equivalence with a certain range:
+The following example implements an orderable object that defines equivalence with a certain range:
 ```python
 import numpy as np
 from dataclasses import dataclass
