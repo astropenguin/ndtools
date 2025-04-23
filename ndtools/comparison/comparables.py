@@ -20,8 +20,8 @@ from typing import Any as Any_
 
 # dependencies
 import numpy as np
-from . import operators as op
-from .utils import has_usermethod
+from .operators import eq, ge, gt, le, lt, ne
+from .utils import has_method
 
 
 class Combinable:
@@ -349,9 +349,9 @@ class TotalEquality(Equatable):
     def __init_subclass__(cls, **kwargs: Any_) -> None:
         super().__init_subclass__(**kwargs)
 
-        for name in ("eq", "ne"):
-            if not has_usermethod(cls, f"__{name}__"):
-                setattr(cls, f"__{name}__", getattr(op, name))
+        for operator in (eq, ne):
+            if not has_method(cls, f"__{operator.__name__}__"):
+                setattr(cls, f"__{operator.__name__}__", operator)
 
 
 class TotalOrdering(Orderable):
@@ -397,6 +397,6 @@ class TotalOrdering(Orderable):
     def __init_subclass__(cls, **kwargs: Any_) -> None:
         super().__init_subclass__(**kwargs)
 
-        for name in ("eq", "ge", "gt", "le", "lt", "ne"):
-            if not has_usermethod(cls, f"__{name}__"):
-                setattr(cls, f"__{name}__", getattr(op, name))
+        for operator in (eq, ge, gt, le, lt, ne):
+            if not has_method(cls, f"__{operator.__name__}__"):
+                setattr(cls, f"__{operator.__name__}__", operator)
