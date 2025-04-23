@@ -9,16 +9,12 @@ __all__ = [
     "Orderable",
     "TotalEquality",
     "TotalOrdering",
-    "collections",
-    "comparable",
-    "operators",
+    "comparison",
 ]
 __version__ = "0.3.0"
 
 
 # dependencies
-from . import collections
-from . import comparable
-from . import operators
-from .collections import *
-from .comparable import *
+from . import comparison
+from .comparison.collections import *
+from .comparison.comparable import *
