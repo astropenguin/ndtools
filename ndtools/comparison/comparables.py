@@ -1,16 +1,7 @@
-__all__ = [
-    "All",
-    "Any",
-    "Combinable",
-    "Equatable",
-    "Orderable",
-    "TotalEquality",
-    "TotalOrdering",
-]
+__all__ = ["All", "Any", "Combinable", "Equatable", "Orderable"]
 
 
 # standard library
-from abc import ABC, abstractmethod
 from collections import UserList
 from collections.abc import Callable, Iterable
 from functools import reduce
@@ -77,18 +68,15 @@ class Combinable:
         return Any([*iterable(self), *iterable(other)])
 
 
-class Equatable(ABC):
+class Equatable:
     """Implement equality operations for multidimensional arrays.
 
     Classes that inherit from this abstract base class
-    and implement both ``__eq__`` and ``__ne__`` special methods
+    and implement ``__eq__`` or ``__ne__`` special methods
     can perform their own equality operations on multidimensional arrays.
     These special methods should be implemented for the target array like
     ``def __eq__(self, array)``. Then the class instance and the array
     can perform ``instance == array`` and ``array == instance``.
-
-    Raises:
-        TypeError: Raised if both ``__eq__`` and ``__ne__`` are not defined.
 
     Examples:
         ::
@@ -100,9 +88,6 @@ class Equatable(ABC):
                 def __eq__(self, array):
                     return array % 2 == 0
 
-                def __ne__(self, array):
-                    return ~(self == array)
-
             Even() == np.arange(3)  # -> array([True, False, True])
             np.arange(3) == Even()  # -> array([True, False, True])
 
@@ -111,13 +96,8 @@ class Equatable(ABC):
 
     """
 
-    @abstractmethod
-    def __eq__(self, other: Any_) -> Any_:
-        pass
-
-    @abstractmethod
-    def __ne__(self, other: Any_) -> Any_:
-        pass
+    __eq__: Callable[..., Any_]
+    __ne__: Callable[..., Any_]
 
     def __array_ufunc__(
         self: Any_,
@@ -134,21 +114,24 @@ class Equatable(ABC):
 
         return NotImplemented
 
+    def __init_subclass__(cls, **kwargs: Any_) -> None:
+        super().__init_subclass__(**kwargs)
 
-class Orderable(ABC):
+        for operator in (eq, ne):
+            if not has_method(cls, f"__{operator.__name__}__"):
+                setattr(cls, f"__{operator.__name__}__", operator)
+
+
+class Orderable:
     """Implement ordering operations for multidimensional arrays.
 
     Classes that inherit from this abstract base class
-    and implement all of ``__eq__``, ``__ge__``, ``__gt__``,
-    ``__le__``, ``__lt__``, and ``__ne__`` special methods
+    and implement both (1) ``__eq__`` or ``__ne__`` special methods
+    and (2) ``__ge__``, ``__gt__``, ``__le__``, or ``__lt__`` special methods
     can perform their own ordering operations on multidimensional arrays.
     These special methods should be implemented for the target array like
     ``def __ge__(self, array)``. Then the class instance and the array
     can perform ``instance >= array`` and ``array <= instance``.
-
-    Raises:
-        TypeError: Raised if all of ``__eq__``, ``__ge__``, ``__gt__``,
-            ``__le__``, ``__lt__``, and ``__ne__`` are not defined.
 
     Examples:
         ::
@@ -168,18 +151,6 @@ class Orderable(ABC):
                 def __ge__(self, array):
                     return array < self.upper
 
-                def __gt__(self, array):
-                    return array < self.lower
-
-                def __le__(self, array):
-                    return ~(self > array)
-
-                def __lt__(self, array):
-                    return ~(self >= array)
-
-                def __ne__(self, array):
-                    return ~(self == array)
-
             Range(1, 2) == np.arange(3)  # -> array([False, True, False])
             np.arange(3) == Range(1, 2)  # -> array([False, True, False])
 
@@ -188,29 +159,12 @@ class Orderable(ABC):
 
     """
 
-    @abstractmethod
-    def __eq__(self, other: Any_) -> Any_:
-        pass
-
-    @abstractmethod
-    def __ge__(self, other: Any_) -> Any_:
-        pass
-
-    @abstractmethod
-    def __gt__(self, other: Any_) -> Any_:
-        pass
-
-    @abstractmethod
-    def __le__(self, other: Any_) -> Any_:
-        pass
-
-    @abstractmethod
-    def __lt__(self, other: Any_) -> Any_:
-        pass
-
-    @abstractmethod
-    def __ne__(self, other: Any_) -> Any_:
-        pass
+    __eq__: Callable[..., Any_]
+    __ge__: Callable[..., Any_]
+    __gt__: Callable[..., Any_]
+    __le__: Callable[..., Any_]
+    __lt__: Callable[..., Any_]
+    __ne__: Callable[..., Any_]
 
     def __array_ufunc__(
         self: Any_,
@@ -238,6 +192,13 @@ class Orderable(ABC):
             return self != inputs[0]
 
         return NotImplemented
+
+    def __init_subclass__(cls, **kwargs: Any_) -> None:
+        super().__init_subclass__(**kwargs)
+
+        for operator in (eq, ge, gt, le, lt, ne):
+            if not has_method(cls, f"__{operator.__name__}__"):
+                setattr(cls, f"__{operator.__name__}__", operator)
 
 
 class All(UserList[Any_], Combinable, Equatable):
@@ -275,9 +236,6 @@ class All(UserList[Any_], Combinable, Equatable):
     def __eq__(self, other: Any_) -> Any_:
         return reduce(and_, (other == cond for cond in self))
 
-    def __ne__(self, other: Any_) -> Any_:
-        return ~(self == other)
-
 
 class Any(UserList[Any_], Combinable, Equatable):
     """Implement logical disjunction between equatables.
@@ -313,90 +271,3 @@ class Any(UserList[Any_], Combinable, Equatable):
 
     def __eq__(self, other: Any_) -> Any_:
         return reduce(or_, (other == cond for cond in self))
-
-    def __ne__(self, other: Any_) -> Any_:
-        return ~(self == other)
-
-
-class TotalEquality(Equatable):
-    """Implement missing equality operations for multidimensional arrays.
-
-    Raises:
-        ValueError: Raised if none of the equality operators (==, !=) is defined.
-
-    Examples:
-        ::
-
-            import numpy as np
-            from ndtools import TotalEquality
-
-            class Even(TotalEquality):
-                def __eq__(self, array):
-                    return array % 2 == 0
-
-            Even() == np.arange(3)  # -> array([True, False, True])
-            np.arange(3) == Even()  # -> array([True, False, True])
-
-            Even() != np.arange(3)  # -> array([False, True, False])
-            np.arange(3) != Even()  # -> array([False, True, False])
-
-    """
-
-    __eq__: Callable[..., Any_]
-    __ne__: Callable[..., Any_]
-    __array_ufunc__: Callable[..., Any_]
-
-    def __init_subclass__(cls, **kwargs: Any_) -> None:
-        super().__init_subclass__(**kwargs)
-
-        for operator in (eq, ne):
-            if not has_method(cls, f"__{operator.__name__}__"):
-                setattr(cls, f"__{operator.__name__}__", operator)
-
-
-class TotalOrdering(Orderable):
-    """Implement missing ordering operations for multidimensional arrays.
-
-    Raises:
-        ValueError: Raise if none of the ordering operator (>=, >, <=, <) is defined.
-
-    Examples:
-        ::
-
-            import numpy as np
-            from dataclasses import dataclass
-            from ndtools import TotalOrdering
-
-            @dataclass
-            class Range(TotalOrdering):
-                lower: float
-                upper: float
-
-                def __eq__(self, array):
-                    return (array >= self.lower) & (array < self.upper)
-
-                def __ge__(self, array):
-                    return array < self.upper
-
-            Range(1, 2) == np.arange(3)  # -> array([False, True, False])
-            np.arange(3) == Range(1, 2)  # -> array([False, True, False])
-
-            Range(1, 2) >= np.arange(3)  # -> array([True, True, False])
-            np.arange(3) <= Range(1, 2)  # -> array([True, True, False])
-
-    """
-
-    __eq__: Callable[..., Any_]
-    __ge__: Callable[..., Any_]
-    __gt__: Callable[..., Any_]
-    __le__: Callable[..., Any_]
-    __lt__: Callable[..., Any_]
-    __ne__: Callable[..., Any_]
-    __array_ufunc__: Callable[..., Any_]
-
-    def __init_subclass__(cls, **kwargs: Any_) -> None:
-        super().__init_subclass__(**kwargs)
-
-        for operator in (eq, ge, gt, le, lt, ne):
-            if not has_method(cls, f"__{operator.__name__}__"):
-                setattr(cls, f"__{operator.__name__}__", operator)
