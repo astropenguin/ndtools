@@ -1,20 +1,34 @@
-__all__ = ["Apply", "Match", "Range"]
+__all__ = [
+    "All",
+    "Any",
+    "Apply",
+    "Combinable",
+    "Equatable",
+    "Match",
+    "Range",
+    "Orderable",
+    "TotalEquality",
+    "TotalOrdering",
+    "comparables",
+    "operators",
+]
 
 
-# standard libary
+# standard library
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Literal
+from typing import Any as Any_, Literal
 
 
 # dependencies
 import pandas as pd
-from .combination import Combinable
-from .comparison import TotalEquality, TotalOrdering
+from . import comparables
+from . import operators
+from .comparables import *
 
 
 @dataclass(frozen=True)
-class Apply(Combinable, TotalEquality):
+class Apply(comparables.Combinable, comparables.TotalEquality):
     """Equatable that applies a boolean function for multidimensional arrays.
 
     Args:
@@ -33,16 +47,16 @@ class Apply(Combinable, TotalEquality):
 
     """
 
-    func: Callable[..., Any]
-    args: Any
-    kwargs: Any
+    func: Callable[..., Any_]
+    args: Any_
+    kwargs: Any_
 
-    def __init__(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> None:
+    def __init__(self, func: Callable[..., Any_], *args: Any_, **kwargs: Any_) -> None:
         super().__setattr__("func", func)
         super().__setattr__("args", args)
         super().__setattr__("kwargs", kwargs)
 
-    def __eq__(self, array: Any) -> Any:
+    def __eq__(self, array: Any_) -> Any_:
         return self.func(array, *self.args, **self.kwargs)
 
     def __repr__(self) -> str:
@@ -50,7 +64,7 @@ class Apply(Combinable, TotalEquality):
 
 
 @dataclass(frozen=True)
-class Match(Combinable, TotalEquality):
+class Match(comparables.Combinable, comparables.TotalEquality):
     """Equatable that matches regular expression to each array element.
 
     It uses ``pandas.Series.str.fullmatch`` so the same options are available.
@@ -77,9 +91,9 @@ class Match(Combinable, TotalEquality):
     pat: str
     case: bool = True
     flags: int = 0
-    na: Any = None
+    na: Any_ = None
 
-    def __eq__(self, array: Any) -> Any:
+    def __eq__(self, array: Any_) -> Any_:
         return (
             pd.Series(array)  # type: ignore
             .str.fullmatch(self.pat, self.case, self.flags, self.na)
@@ -88,7 +102,7 @@ class Match(Combinable, TotalEquality):
 
 
 @dataclass(frozen=True)
-class Range(Combinable, TotalOrdering):
+class Range(comparables.Combinable, comparables.TotalOrdering):
     """Equitable that implements equivalence with a certain range.
 
     Args:
@@ -112,11 +126,11 @@ class Range(Combinable, TotalOrdering):
 
     """
 
-    lower: Any
-    upper: Any
+    lower: Any_
+    upper: Any_
     bounds: Literal["[]", "[)", "(]", "()"] = "[)"
 
-    def __eq__(self, array: Any) -> Any:
+    def __eq__(self, array: Any_) -> Any_:
         if self.bounds == "[]":
             return (array >= self.lower) & (array <= self.upper)
 
@@ -131,7 +145,7 @@ class Range(Combinable, TotalOrdering):
 
         raise ValueError("Bounds must be either [], [), (], or [].")
 
-    def __ge__(self, array: Any) -> Any:
+    def __ge__(self, array: Any_) -> Any_:
         if self.bounds == "[)" or self.bounds == "()":
             return array < self.upper
 
@@ -140,7 +154,7 @@ class Range(Combinable, TotalOrdering):
 
         raise ValueError("Bounds must be either [], [), (], or [].")
 
-    def __gt__(self, array: Any) -> Any:
+    def __gt__(self, array: Any_) -> Any_:
         if self.bounds == "[]" or self.bounds == "[)":
             return array < self.lower
 
@@ -149,13 +163,13 @@ class Range(Combinable, TotalOrdering):
 
         raise ValueError("Bounds must be either [], [), (], or [].")
 
-    def __le__(self, array: Any) -> Any:
+    def __le__(self, array: Any_) -> Any_:
         return ~(self > array)
 
-    def __lt__(self, array: Any) -> Any:
+    def __lt__(self, array: Any_) -> Any_:
         return ~(self >= array)
 
-    def __ne__(self, array: Any) -> Any:
+    def __ne__(self, array: Any_) -> Any_:
         return ~(self == array)
 
     def __repr__(self) -> str:

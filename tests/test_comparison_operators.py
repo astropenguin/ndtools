@@ -1,6 +1,6 @@
 # dependencies
 import numpy as np
-import ndtools.operators as op
+import ndtools.comparison.operators as op
 
 
 def test_eq_by_ne() -> None:
