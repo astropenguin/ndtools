@@ -9,8 +9,7 @@ from typing import Any, Literal
 
 # dependencies
 import pandas as pd
-from .comparable import Combinable
-from .comparison import TotalEquality, TotalOrdering
+from .comparable import Combinable, TotalEquality, TotalOrdering
 
 
 @dataclass(frozen=True)
