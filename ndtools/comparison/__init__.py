@@ -9,7 +9,7 @@ __all__ = [
     "Orderable",
     "TotalEquality",
     "TotalOrdering",
-    "comparable",
+    "comparables",
     "operators",
 ]
 
@@ -22,13 +22,13 @@ from typing import Any as Any_, Literal
 
 # dependencies
 import pandas as pd
-from . import comparable
+from . import comparables
 from . import operators
-from .comparable import *
+from .comparables import *
 
 
 @dataclass(frozen=True)
-class Apply(comparable.Combinable, comparable.TotalEquality):
+class Apply(comparables.Combinable, comparables.TotalEquality):
     """Equatable that applies a boolean function for multidimensional arrays.
 
     Args:
@@ -64,7 +64,7 @@ class Apply(comparable.Combinable, comparable.TotalEquality):
 
 
 @dataclass(frozen=True)
-class Match(comparable.Combinable, comparable.TotalEquality):
+class Match(comparables.Combinable, comparables.TotalEquality):
     """Equatable that matches regular expression to each array element.
 
     It uses ``pandas.Series.str.fullmatch`` so the same options are available.
@@ -102,7 +102,7 @@ class Match(comparable.Combinable, comparable.TotalEquality):
 
 
 @dataclass(frozen=True)
-class Range(comparable.Combinable, comparable.TotalOrdering):
+class Range(comparables.Combinable, comparables.TotalOrdering):
     """Equitable that implements equivalence with a certain range.
 
     Args:
