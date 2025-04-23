@@ -29,7 +29,7 @@ from .comparables import *
 
 @dataclass(frozen=True)
 class Apply(Combinable, Equatable):
-    """Equatable that applies a boolean function for multidimensional arrays.
+    """Comparable that applies a boolean function for multidimensional arrays.
 
     Args:
         func: Boolean function that takes ``func(array, *args, **kwargs)``.
@@ -65,7 +65,7 @@ class Apply(Combinable, Equatable):
 
 @dataclass(frozen=True)
 class Match(Combinable, Equatable):
-    """Equatable that matches regular expression to each array element.
+    """Comparable that matches regular expression to each array element.
 
     It uses ``pandas.Series.str.fullmatch`` so the same options are available.
 
@@ -103,7 +103,7 @@ class Match(Combinable, Equatable):
 
 @dataclass(frozen=True)
 class Range(Combinable, Orderable):
-    """Equitable that implements equivalence with a certain range.
+    """Comparable that implements equivalence with a certain range.
 
     Args:
         lower: Lower value of the range.

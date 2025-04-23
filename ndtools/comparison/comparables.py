@@ -16,16 +16,16 @@ from .utils import has_method
 
 
 class Combinable:
-    """Implement logical operations between objects.
+    """Implement logical operations between comparables.
 
-    Classes that inherit from this mix-in class can perform logical
-    operations between the class instance and other object.
-    Then ``instance & object`` will return ``All([instance, other])``
-    and ``instance | object`` will return ``Any[instance, other])``,
+    Classes that inherit from this mix-in class can perform
+    logical operations between comparables.
+    Then ``comparable_0 & comparable_1 & ...``
+    will return ``All([comparable_0, comparable_1, ...])``
+    and ``comparable_0 | comparable_1 | ...``
+    will return ``Any([comparable_0, comparable_1, ...])``.
     where ``All`` and ``Any`` are the implementation of
     logical conjunction and logical disjunction, respectively.
-    In general, ``Combinable`` should be used with the ``Equatable``
-    abstract base class to implement combinable equatables.
 
     Examples:
         ::
@@ -71,7 +71,7 @@ class Combinable:
 class Equatable:
     """Implement equality operations for multidimensional arrays.
 
-    Classes that inherit from this abstract base class
+    Classes that inherit from this mix-in class
     and implement ``__eq__`` or ``__ne__`` special methods
     can perform their own equality operations on multidimensional arrays.
     These special methods should be implemented for the target array like
@@ -125,7 +125,7 @@ class Equatable:
 class Orderable:
     """Implement ordering operations for multidimensional arrays.
 
-    Classes that inherit from this abstract base class
+    Classes that inherit from this mix-in base class
     and implement both (1) ``__eq__`` or ``__ne__`` special methods
     and (2) ``__ge__``, ``__gt__``, ``__le__``, or ``__lt__`` special methods
     can perform their own ordering operations on multidimensional arrays.
@@ -202,11 +202,11 @@ class Orderable:
 
 
 class All(UserList[Any_], Combinable, Equatable):
-    """Implement logical conjunction between equatables.
+    """Implement logical conjunction between comparables.
 
-    It should contain equatables like ``All([eqatable_0, equatable_1, ...])``.
+    It should contain comparables like ``All([comparable_0, comparable_1, ...])``.
     Then the equality operation on the target array will perform like
-    ``(array == equatable_0) & array == equatable_1) & ...``.
+    ``(array == comparable_0) & array == comparable_1) & ...``.
 
     Examples:
         ::
@@ -238,11 +238,11 @@ class All(UserList[Any_], Combinable, Equatable):
 
 
 class Any(UserList[Any_], Combinable, Equatable):
-    """Implement logical disjunction between equatables.
+    """Implement logical disjunction between comparables.
 
-    It should contain equatables like ``Any([eqatable_0, equatable_1, ...])``.
+    It should contain comparables like ``Any([comparable_0, comparable_1, ...])``.
     Then the equality operation on the target array will perform like
-    ``(array == equatable_0) | array == equatable_1) & ...``.
+    ``(array == comparable_0) | array == comparable_1) & ...``.
 
     Examples:
         ::
