@@ -21,6 +21,7 @@ from typing import Any as Any_
 # dependencies
 import numpy as np
 from . import operators as op
+from .utils import has_usermethod
 
 
 class Combinable:
@@ -399,22 +400,3 @@ class TotalOrdering(Orderable):
         for name in ("eq", "ge", "gt", "le", "lt", "ne"):
             if not has_usermethod(cls, f"__{name}__"):
                 setattr(cls, f"__{name}__", getattr(op, name))
-
-
-def has_usermethod(obj: Any_, name: str, /) -> bool:
-    """Check if an object has a user-defined method with given name."""
-    return (
-        hasattr(obj, name)
-        and not is_abstractmethod(getattr(obj, name))
-        and not is_objectmethod(getattr(obj, name))
-    )
-
-
-def is_abstractmethod(method: Any_, /) -> bool:
-    """Check if given method is an abstract method."""
-    return bool(getattr(method, "__isabstractmethod__", None))
-
-
-def is_objectmethod(method: Any_, /) -> bool:
-    """Check if given method is defined in the object class."""
-    return method is getattr(object, method.__name__, None)
