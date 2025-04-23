@@ -1,5 +1,4 @@
 # standard library
-from dataclasses import dataclass
 from typing import Any as Any_
 
 
@@ -41,9 +40,12 @@ def test_Any() -> None:
 
 
 def test_Combinable() -> None:
-    @dataclass
     class Test(Combinable):
-        data: float
+        def __init__(self, value: Any_) -> None:
+            self.value = value
+
+        def __eq__(self, other: Any_) -> Any_:
+            return self.value == other
 
     assert eq(Test(0) & 1, All([Test(0), 1]))
     assert eq(Test(0) | 1, Any([Test(0), 1]))
@@ -99,133 +101,233 @@ def test_Orderable() -> None:
     assert (np.arange(3) != Test()) == Implemented("__ne__")
 
 
-def test_TotalEquality_by_eq() -> None:
-    class Even(TotalEquality):
+def test_TotalEquality_eq() -> None:
+    class Test(TotalEquality):
         def __eq__(self, array: Any_) -> Any_:
             return array % 2 == 0
 
-    left, right = np.arange(3), Even()
+    left, right = np.arange(3), Test()
     assert all((left == right) == np.array([True, False, True]))
     assert all((right == left) == np.array([True, False, True]))
     assert all((left != right) == ~np.array([True, False, True]))
     assert all((right != left) == ~np.array([True, False, True]))
 
 
-def test_TotalEquality_by_ne() -> None:
-    class Even(TotalEquality):
+def test_TotalEquality_ne() -> None:
+    class Test(TotalEquality):
         def __ne__(self, array: Any_) -> Any_:
             return array % 2 == 1
 
-    left, right = np.arange(3), Even()
+    left, right = np.arange(3), Test()
     assert all((left == right) == np.array([True, False, True]))
     assert all((right == left) == np.array([True, False, True]))
     assert all((left != right) == ~np.array([True, False, True]))
     assert all((right != left) == ~np.array([True, False, True]))
 
 
-def test_TotalOrdering_by_ge() -> None:
-    @dataclass
-    class Range(TotalOrdering):
-        lower: Any_
-        upper: Any_
+def test_TotalOrdering_eqge() -> None:
+    class Test(TotalOrdering):
+        def __init__(self, value: Any_) -> None:
+            self.value = value
 
         def __eq__(self, array: Any_) -> Any_:
-            return (array >= self.lower) & (array < self.upper)
+            return array == self.value
 
         def __ge__(self, array: Any_) -> Any_:
-            return array < self.upper
+            return array <= self.value
 
-    left, right = np.arange(3), Range(1, 2)
+    left, right = Test(1), np.arange(3)
     assert all((left == right) == np.array([False, True, False]))
     assert all((right == left) == np.array([False, True, False]))
+    assert all((left >= right) == np.array([True, True, False]))
+    assert all((right <= left) == np.array([True, True, False]))
+    assert all((left > right) == np.array([True, False, False]))
+    assert all((right < left) == np.array([True, False, False]))
+    assert all((left <= right) == np.array([False, True, True]))
+    assert all((right >= left) == np.array([False, True, True]))
+    assert all((left < right) == np.array([False, False, True]))
+    assert all((right > left) == np.array([False, False, True]))
     assert all((left != right) == np.array([True, False, True]))
     assert all((right != left) == np.array([True, False, True]))
-    assert all((left >= right) == np.array([False, True, True]))
-    assert all((right <= left) == np.array([False, True, True]))
-    assert all((left > right) == np.array([False, False, True]))
-    assert all((right < left) == np.array([False, False, True]))
-    assert all((left <= right) == np.array([True, True, False]))
-    assert all((right >= left) == np.array([True, True, False]))
-    assert all((left < right) == np.array([True, False, False]))
-    assert all((right > left) == np.array([True, False, False]))
 
 
-def test_TotalOrdering_by_gt() -> None:
-    @dataclass
-    class Range(TotalOrdering):
-        lower: Any_
-        upper: Any_
+def test_TotalOrdering_eqgt() -> None:
+    class Test(TotalOrdering):
+        def __init__(self, value: Any_) -> None:
+            self.value = value
 
         def __eq__(self, array: Any_) -> Any_:
-            return (array >= self.lower) & (array < self.upper)
+            return array == self.value
 
         def __gt__(self, array: Any_) -> Any_:
-            return array < self.lower
+            return array < self.value
 
-    left, right = np.arange(3), Range(1, 2)
+    left, right = Test(1), np.arange(3)
     assert all((left == right) == np.array([False, True, False]))
     assert all((right == left) == np.array([False, True, False]))
+    assert all((left >= right) == np.array([True, True, False]))
+    assert all((right <= left) == np.array([True, True, False]))
+    assert all((left > right) == np.array([True, False, False]))
+    assert all((right < left) == np.array([True, False, False]))
+    assert all((left <= right) == np.array([False, True, True]))
+    assert all((right >= left) == np.array([False, True, True]))
+    assert all((left < right) == np.array([False, False, True]))
+    assert all((right > left) == np.array([False, False, True]))
     assert all((left != right) == np.array([True, False, True]))
     assert all((right != left) == np.array([True, False, True]))
-    assert all((left >= right) == np.array([False, True, True]))
-    assert all((right <= left) == np.array([False, True, True]))
-    assert all((left > right) == np.array([False, False, True]))
-    assert all((right < left) == np.array([False, False, True]))
-    assert all((left <= right) == np.array([True, True, False]))
-    assert all((right >= left) == np.array([True, True, False]))
-    assert all((left < right) == np.array([True, False, False]))
-    assert all((right > left) == np.array([True, False, False]))
 
 
-def test_TotalOrdering_by_le() -> None:
-    @dataclass
-    class Range(TotalOrdering):
-        lower: Any_
-        upper: Any_
+def test_TotalOrdering_eqle() -> None:
+    class Test(TotalOrdering):
+        def __init__(self, value: Any_) -> None:
+            self.value = value
 
         def __eq__(self, array: Any_) -> Any_:
-            return (array >= self.lower) & (array < self.upper)
+            return array == self.value
 
         def __le__(self, array: Any_) -> Any_:
-            return array >= self.lower
+            return array >= self.value
 
-    left, right = np.arange(3), Range(1, 2)
+    left, right = Test(1), np.arange(3)
     assert all((left == right) == np.array([False, True, False]))
     assert all((right == left) == np.array([False, True, False]))
+    assert all((left >= right) == np.array([True, True, False]))
+    assert all((right <= left) == np.array([True, True, False]))
+    assert all((left > right) == np.array([True, False, False]))
+    assert all((right < left) == np.array([True, False, False]))
+    assert all((left <= right) == np.array([False, True, True]))
+    assert all((right >= left) == np.array([False, True, True]))
+    assert all((left < right) == np.array([False, False, True]))
+    assert all((right > left) == np.array([False, False, True]))
     assert all((left != right) == np.array([True, False, True]))
     assert all((right != left) == np.array([True, False, True]))
-    assert all((left >= right) == np.array([False, True, True]))
-    assert all((right <= left) == np.array([False, True, True]))
-    assert all((left > right) == np.array([False, False, True]))
-    assert all((right < left) == np.array([False, False, True]))
-    assert all((left <= right) == np.array([True, True, False]))
-    assert all((right >= left) == np.array([True, True, False]))
-    assert all((left < right) == np.array([True, False, False]))
-    assert all((right > left) == np.array([True, False, False]))
 
 
-def test_TotalOrdering_by_lt() -> None:
-    @dataclass
-    class Range(TotalOrdering):
-        lower: Any_
-        upper: Any_
+def test_TotalOrdering_eqlt() -> None:
+    class Test(TotalOrdering):
+        def __init__(self, value: Any_) -> None:
+            self.value = value
 
         def __eq__(self, array: Any_) -> Any_:
-            return (array >= self.lower) & (array < self.upper)
+            return array == self.value
 
         def __lt__(self, array: Any_) -> Any_:
-            return array >= self.upper
+            return array > self.value
 
-    left, right = np.arange(3), Range(1, 2)
+    left, right = Test(1), np.arange(3)
     assert all((left == right) == np.array([False, True, False]))
     assert all((right == left) == np.array([False, True, False]))
+    assert all((left >= right) == np.array([True, True, False]))
+    assert all((right <= left) == np.array([True, True, False]))
+    assert all((left > right) == np.array([True, False, False]))
+    assert all((right < left) == np.array([True, False, False]))
+    assert all((left <= right) == np.array([False, True, True]))
+    assert all((right >= left) == np.array([False, True, True]))
+    assert all((left < right) == np.array([False, False, True]))
+    assert all((right > left) == np.array([False, False, True]))
     assert all((left != right) == np.array([True, False, True]))
     assert all((right != left) == np.array([True, False, True]))
-    assert all((left >= right) == np.array([False, True, True]))
-    assert all((right <= left) == np.array([False, True, True]))
-    assert all((left > right) == np.array([False, False, True]))
-    assert all((right < left) == np.array([False, False, True]))
-    assert all((left <= right) == np.array([True, True, False]))
-    assert all((right >= left) == np.array([True, True, False]))
-    assert all((left < right) == np.array([True, False, False]))
-    assert all((right > left) == np.array([True, False, False]))
+
+
+def test_TotalOrdering_gene() -> None:
+    class Test(TotalOrdering):
+        def __init__(self, value: Any_) -> None:
+            self.value = value
+
+        def __ge__(self, array: Any_) -> Any_:
+            return array <= self.value
+
+        def __ne__(self, array: Any_) -> Any_:
+            return array != self.value
+
+    left, right = Test(1), np.arange(3)
+    assert all((left == right) == np.array([False, True, False]))
+    assert all((right == left) == np.array([False, True, False]))
+    assert all((left >= right) == np.array([True, True, False]))
+    assert all((right <= left) == np.array([True, True, False]))
+    assert all((left > right) == np.array([True, False, False]))
+    assert all((right < left) == np.array([True, False, False]))
+    assert all((left <= right) == np.array([False, True, True]))
+    assert all((right >= left) == np.array([False, True, True]))
+    assert all((left < right) == np.array([False, False, True]))
+    assert all((right > left) == np.array([False, False, True]))
+    assert all((left != right) == np.array([True, False, True]))
+    assert all((right != left) == np.array([True, False, True]))
+
+
+def test_TotalOrdering_gtne() -> None:
+    class Test(TotalOrdering):
+        def __init__(self, value: Any_) -> None:
+            self.value = value
+
+        def __gt__(self, array: Any_) -> Any_:
+            return array < self.value
+
+        def __ne__(self, array: Any_) -> Any_:
+            return array != self.value
+
+    left, right = Test(1), np.arange(3)
+    assert all((left == right) == np.array([False, True, False]))
+    assert all((right == left) == np.array([False, True, False]))
+    assert all((left >= right) == np.array([True, True, False]))
+    assert all((right <= left) == np.array([True, True, False]))
+    assert all((left > right) == np.array([True, False, False]))
+    assert all((right < left) == np.array([True, False, False]))
+    assert all((left <= right) == np.array([False, True, True]))
+    assert all((right >= left) == np.array([False, True, True]))
+    assert all((left < right) == np.array([False, False, True]))
+    assert all((right > left) == np.array([False, False, True]))
+    assert all((left != right) == np.array([True, False, True]))
+    assert all((right != left) == np.array([True, False, True]))
+
+
+def test_TotalOrdering_lene() -> None:
+    class Test(TotalOrdering):
+        def __init__(self, value: Any_) -> None:
+            self.value = value
+
+        def __le__(self, array: Any_) -> Any_:
+            return array >= self.value
+
+        def __ne__(self, array: Any_) -> Any_:
+            return array != self.value
+
+    left, right = Test(1), np.arange(3)
+    assert all((left == right) == np.array([False, True, False]))
+    assert all((right == left) == np.array([False, True, False]))
+    assert all((left >= right) == np.array([True, True, False]))
+    assert all((right <= left) == np.array([True, True, False]))
+    assert all((left > right) == np.array([True, False, False]))
+    assert all((right < left) == np.array([True, False, False]))
+    assert all((left <= right) == np.array([False, True, True]))
+    assert all((right >= left) == np.array([False, True, True]))
+    assert all((left < right) == np.array([False, False, True]))
+    assert all((right > left) == np.array([False, False, True]))
+    assert all((left != right) == np.array([True, False, True]))
+    assert all((right != left) == np.array([True, False, True]))
+
+
+def test_TotalOrdering_ltne() -> None:
+    class Test(TotalOrdering):
+        def __init__(self, value: Any_) -> None:
+            self.value = value
+
+        def __lt__(self, array: Any_) -> Any_:
+            return array > self.value
+
+        def __ne__(self, array: Any_) -> Any_:
+            return array != self.value
+
+    left, right = Test(1), np.arange(3)
+    assert all((left == right) == np.array([False, True, False]))
+    assert all((right == left) == np.array([False, True, False]))
+    assert all((left >= right) == np.array([True, True, False]))
+    assert all((right <= left) == np.array([True, True, False]))
+    assert all((left > right) == np.array([True, False, False]))
+    assert all((right < left) == np.array([True, False, False]))
+    assert all((left <= right) == np.array([False, True, True]))
+    assert all((right >= left) == np.array([False, True, True]))
+    assert all((left < right) == np.array([False, False, True]))
+    assert all((right > left) == np.array([False, False, True]))
+    assert all((left != right) == np.array([True, False, True]))
+    assert all((right != left) == np.array([True, False, True]))
