@@ -8,7 +8,7 @@ from typing import Any, TypeVar
 
 # dependencies
 from . import operators as op
-from .abc import Equatable, Orderable
+from .comparable import Equatable, Orderable
 
 
 # type hints

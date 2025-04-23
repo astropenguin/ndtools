@@ -9,9 +9,9 @@ __all__ = [
     "Orderable",
     "TotalEquality",
     "TotalOrdering",
-    "abc",
     "collections",
     "combination",
+    "comparable",
     "comparison",
     "operators",
 ]
@@ -19,12 +19,12 @@ __version__ = "0.3.0"
 
 
 # dependencies
-from . import abc
 from . import collections
 from . import combination
+from . import comparable
 from . import comparison
 from . import operators
-from .abc import *
 from .collections import *
 from .combination import *
+from .comparable import *
 from .comparison import *

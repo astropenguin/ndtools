@@ -10,7 +10,7 @@ from typing import Any as Any_
 
 
 # dependencies
-from .abc import Equatable
+from .comparable import Equatable
 
 
 class Combinable:
