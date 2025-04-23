@@ -4,24 +4,12 @@ from typing import Any as Any_
 
 # dependencies
 import numpy as np
-from ndtools import (
-    All,
-    Any,
-    Combinable,
-    Equatable,
-    Orderable,
-    TotalEquality,
-    TotalOrdering,
-)
+from ndtools import All, Any, Combinable, Equatable, Orderable
 
 
 # helper functions
 def eq(left: Any_, right: Any_, /) -> bool:
     return super(type(left), left).__eq__(right)
-
-
-def Implemented(method: str) -> str:
-    return f"{method} is implemented"
 
 
 # test functions
@@ -51,58 +39,8 @@ def test_Combinable() -> None:
     assert eq(Test(0) | 1, Any([Test(0), 1]))
 
 
-def test_Equatable() -> None:
+def test_Equatable_eq() -> None:
     class Test(Equatable):
-        def __eq__(self, other: Any_) -> Any_:
-            return Implemented("__eq__")
-
-        def __ne__(self, other: Any_) -> Any_:
-            return Implemented("__ne__")
-
-    assert (Test() == np.arange(3)) == Implemented("__eq__")
-    assert (Test() != np.arange(3)) == Implemented("__ne__")
-
-    assert (np.arange(3) == Test()) == Implemented("__eq__")
-    assert (np.arange(3) != Test()) == Implemented("__ne__")
-
-
-def test_Orderable() -> None:
-    class Test(Orderable):
-        def __eq__(self, other: Any_) -> Any_:
-            return Implemented("__eq__")
-
-        def __ge__(self, other: Any_) -> Any_:
-            return Implemented("__ge__")
-
-        def __gt__(self, other: Any_) -> Any_:
-            return Implemented("__gt__")
-
-        def __le__(self, other: Any_) -> Any_:
-            return Implemented("__le__")
-
-        def __lt__(self, other: Any_) -> Any_:
-            return Implemented("__lt__")
-
-        def __ne__(self, other: Any_) -> Any_:
-            return Implemented("__ne__")
-
-    assert (Test() == np.arange(3)) == Implemented("__eq__")
-    assert (Test() >= np.arange(3)) == Implemented("__ge__")
-    assert (Test() > np.arange(3)) == Implemented("__gt__")
-    assert (Test() <= np.arange(3)) == Implemented("__le__")
-    assert (Test() < np.arange(3)) == Implemented("__lt__")
-    assert (Test() != np.arange(3)) == Implemented("__ne__")
-
-    assert (np.arange(3) == Test()) == Implemented("__eq__")
-    assert (np.arange(3) >= Test()) == Implemented("__le__")
-    assert (np.arange(3) > Test()) == Implemented("__lt__")
-    assert (np.arange(3) <= Test()) == Implemented("__ge__")
-    assert (np.arange(3) < Test()) == Implemented("__gt__")
-    assert (np.arange(3) != Test()) == Implemented("__ne__")
-
-
-def test_TotalEquality_eq() -> None:
-    class Test(TotalEquality):
         def __eq__(self, array: Any_) -> Any_:
             return array % 2 == 0
 
@@ -113,8 +51,8 @@ def test_TotalEquality_eq() -> None:
     assert all((right != left) == ~np.array([True, False, True]))
 
 
-def test_TotalEquality_ne() -> None:
-    class Test(TotalEquality):
+def test_Equatable_ne() -> None:
+    class Test(Equatable):
         def __ne__(self, array: Any_) -> Any_:
             return array % 2 == 1
 
@@ -125,8 +63,8 @@ def test_TotalEquality_ne() -> None:
     assert all((right != left) == ~np.array([True, False, True]))
 
 
-def test_TotalOrdering_eqge() -> None:
-    class Test(TotalOrdering):
+def test_Orderable_eqge() -> None:
+    class Test(Orderable):
         def __init__(self, value: Any_) -> None:
             self.value = value
 
@@ -151,8 +89,8 @@ def test_TotalOrdering_eqge() -> None:
     assert all((right != left) == np.array([True, False, True]))
 
 
-def test_TotalOrdering_eqgt() -> None:
-    class Test(TotalOrdering):
+def test_Orderable_eqgt() -> None:
+    class Test(Orderable):
         def __init__(self, value: Any_) -> None:
             self.value = value
 
@@ -177,8 +115,8 @@ def test_TotalOrdering_eqgt() -> None:
     assert all((right != left) == np.array([True, False, True]))
 
 
-def test_TotalOrdering_eqle() -> None:
-    class Test(TotalOrdering):
+def test_Orderable_eqle() -> None:
+    class Test(Orderable):
         def __init__(self, value: Any_) -> None:
             self.value = value
 
@@ -203,8 +141,8 @@ def test_TotalOrdering_eqle() -> None:
     assert all((right != left) == np.array([True, False, True]))
 
 
-def test_TotalOrdering_eqlt() -> None:
-    class Test(TotalOrdering):
+def test_Orderable_eqlt() -> None:
+    class Test(Orderable):
         def __init__(self, value: Any_) -> None:
             self.value = value
 
@@ -229,8 +167,8 @@ def test_TotalOrdering_eqlt() -> None:
     assert all((right != left) == np.array([True, False, True]))
 
 
-def test_TotalOrdering_gene() -> None:
-    class Test(TotalOrdering):
+def test_Orderable_gene() -> None:
+    class Test(Orderable):
         def __init__(self, value: Any_) -> None:
             self.value = value
 
@@ -255,8 +193,8 @@ def test_TotalOrdering_gene() -> None:
     assert all((right != left) == np.array([True, False, True]))
 
 
-def test_TotalOrdering_gtne() -> None:
-    class Test(TotalOrdering):
+def test_Orderable_gtne() -> None:
+    class Test(Orderable):
         def __init__(self, value: Any_) -> None:
             self.value = value
 
@@ -281,8 +219,8 @@ def test_TotalOrdering_gtne() -> None:
     assert all((right != left) == np.array([True, False, True]))
 
 
-def test_TotalOrdering_lene() -> None:
-    class Test(TotalOrdering):
+def test_Orderable_lene() -> None:
+    class Test(Orderable):
         def __init__(self, value: Any_) -> None:
             self.value = value
 
@@ -307,8 +245,8 @@ def test_TotalOrdering_lene() -> None:
     assert all((right != left) == np.array([True, False, True]))
 
 
-def test_TotalOrdering_ltne() -> None:
-    class Test(TotalOrdering):
+def test_Orderable_ltne() -> None:
+    class Test(Orderable):
         def __init__(self, value: Any_) -> None:
             self.value = value
 

@@ -7,8 +7,6 @@ __all__ = [
     "Match",
     "Range",
     "Orderable",
-    "TotalEquality",
-    "TotalOrdering",
     "comparables",
     "operators",
     "utils",
@@ -30,8 +28,8 @@ from .comparables import *
 
 
 @dataclass(frozen=True)
-class Apply(comparables.Combinable, comparables.TotalEquality):
-    """Equatable that applies a boolean function for multidimensional arrays.
+class Apply(Combinable, Equatable):
+    """Comparable that applies a boolean function for multidimensional arrays.
 
     Args:
         func: Boolean function that takes ``func(array, *args, **kwargs)``.
@@ -66,8 +64,8 @@ class Apply(comparables.Combinable, comparables.TotalEquality):
 
 
 @dataclass(frozen=True)
-class Match(comparables.Combinable, comparables.TotalEquality):
-    """Equatable that matches regular expression to each array element.
+class Match(Combinable, Equatable):
+    """Comparable that matches regular expression to each array element.
 
     It uses ``pandas.Series.str.fullmatch`` so the same options are available.
 
@@ -104,8 +102,8 @@ class Match(comparables.Combinable, comparables.TotalEquality):
 
 
 @dataclass(frozen=True)
-class Range(comparables.Combinable, comparables.TotalOrdering):
-    """Equitable that implements equivalence with a certain range.
+class Range(Combinable, Orderable):
+    """Comparable that implements equivalence with a certain range.
 
     Args:
         lower: Lower value of the range.
@@ -164,15 +162,6 @@ class Range(comparables.Combinable, comparables.TotalOrdering):
             return array <= self.lower
 
         raise ValueError("Bounds must be either [], [), (], or [].")
-
-    def __le__(self, array: Any_) -> Any_:
-        return ~(self > array)
-
-    def __lt__(self, array: Any_) -> Any_:
-        return ~(self >= array)
-
-    def __ne__(self, array: Any_) -> Any_:
-        return ~(self == array)
 
     def __repr__(self) -> str:
         return f"{self.bounds[0]}{self.lower}, {self.upper}{self.bounds[1]}"

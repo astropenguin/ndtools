@@ -15,38 +15,33 @@ pip install ndtools
 
 ## Usage
 
-### Array comparison
+### Array comparisons
 
-ndtools provides `TotalEquality` and `TotalOrdering` that implement missing equality and ordering operations for multidimensional arrays, respectively.
-`TotalEquality` will implement missing `__ne__` from user-defined `__eq__` or missing `__eq__` from user-defined `__ne__`.
-The following example implements an equatable object that checks whether each array element is even or not:
+ndtools provides `Equatable` and `Orderable` that implement equality and ordering operations for multidimensional arrays, respectively.
+`Equatable` will implement missing `__ne__` from user-defined `__eq__` or missing `__eq__` from user-defined `__ne__`.
+The following example implements a comparable that checks whether each array element is even or not:
 ```python
 import numpy as np
-from ndtools import TotalEquality
+from ndtools import Equatable
 
-class Even(TotalEquality):
+class Even(Equatable):
     def __eq__(self, array):
         return array % 2 == 0
 
-Even() == np.arange(3)  # -> array([True, False, True])
-Even() != np.arange(3)  # -> array([False, True, False])
-```
-It also supports a more intuitive notation with the array written on the left-hand side and the object on the right-hand side:
-```python
 np.arange(3) == Even()  # -> array([True, False, True])
 np.arange(3) != Even()  # -> array([False, True, False])
 ```
 
-`TotalOrdering` will implement missing ordering operators (`__ge__`, `__gt__`, `__le__`, `__lt__`).
+`Orderable` will implement missing ordering operators (`__ge__`, `__gt__`, `__le__`, `__lt__`).
 Similar to [`functools.total_ordering`](https://docs.python.org/3/library/functools.html#functools.total_ordering), at least one of them, and `__eq__` or `__ne__` must be user-defined.
-The following example implements an orderable object that defines equivalence with a certain range:
+The following example implements a comparable that defines equivalence with a certain range:
 ```python
 import numpy as np
 from dataclasses import dataclass
-from ndtools import TotalOrdering
+from ndtools import Orderable
 
 @dataclass
-class Range(TotalOrdering)
+class Range(Orderable)
     lower: float
     upper: float
 
@@ -56,32 +51,26 @@ class Range(TotalOrdering)
     def __ge__(self, array):
         return array < self.upper
 
-Range(1, 2) == np.arange(3)  # -> array([False, True, False])
-Range(1, 2) < np.arange(3)   # -> array([False, False, True])
-Range(1, 2) > np.arange(3)   # -> array([True, False, False])
-```
-It also supports a more intuitive notation with the array written on the left-hand side and the object on the right-hand side:
-```python
 np.arange(3) == Range(1, 2) # -> array([False, True, False])
 np.arange(3) < Range(1, 2)  # -> array([True, False, False])
 np.arange(3) > Range(1, 2)  # -> array([False, False, True])
 ```
 
-### Equatable combination
+### Combination of comparables
 
-ndtools provides `All`, `Any`, and `Combinable` that implement logical operations between equatable objects.
-Equatable classes that inherit from `Combinable` can perform logical operations between the class instance and other equatable object.
-Then ``instance & object`` will return ``All([instance, other])`` and ``instance | object`` will return ``Any[instance, other])``.
+ndtools provides `All`, `Any`, and `Combinable` that implement logical operations between comparables.
+Comparable classes that inherit from `Combinable` can perform logical operations between comparables.
+Then ``comparable_0 & comparable_1 & ...`` will return ``All([comparable_0, comparable_1, ...])`` and ``comparable_0 | comparable_1 | ...`` will return ``Any[comparable_0, comparable_1, ...])``.
 
 ```python
 import numpy as np
-from ndtools import Combinable, TotalEquality
+from ndtools import Combinable, Equatable
 
-class Even(Combinable, TotalEquality):
+class Even(Combinable, Equatable):
     def __eq__(self, array):
         return array % 2 == 0
 
-class Odd(Combinable, TotalEquality):
+class Odd(Combinable, Equatable):
     def __eq__(self, array):
         return array % 2 == 1
 
