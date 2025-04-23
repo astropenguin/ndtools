@@ -11,6 +11,7 @@ __all__ = [
     "TotalOrdering",
     "comparables",
     "operators",
+    "utils",
 ]
 
 
@@ -24,6 +25,7 @@ from typing import Any as Any_, Literal
 import pandas as pd
 from . import comparables
 from . import operators
+from . import utils
 from .comparables import *
 
 

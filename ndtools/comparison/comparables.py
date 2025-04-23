@@ -21,39 +21,7 @@ from typing import Any as Any_
 # dependencies
 import numpy as np
 from . import operators as op
-
-
-# constants
-MISSINGS_EQUALITY = {
-    "__eq__": {
-        "__ne__": op.ne_by_eq,
-    },
-    "__ne__": {
-        "__eq__": op.eq_by_ne,
-    },
-}
-MISSINGS_ORDERING = {
-    "__ge__": {
-        "__gt__": op.gt_by_ge,
-        "__le__": op.le_by_ge,
-        "__lt__": op.lt_by_ge,
-    },
-    "__gt__": {
-        "__ge__": op.ge_by_gt,
-        "__le__": op.le_by_gt,
-        "__lt__": op.lt_by_gt,
-    },
-    "__le__": {
-        "__gt__": op.gt_by_le,
-        "__ge__": op.ge_by_le,
-        "__lt__": op.lt_by_le,
-    },
-    "__lt__": {
-        "__gt__": op.gt_by_lt,
-        "__ge__": op.ge_by_lt,
-        "__le__": op.le_by_lt,
-    },
-}
+from .utils import has_usermethod
 
 
 class Combinable:
@@ -380,14 +348,10 @@ class TotalEquality(Equatable):
 
     def __init_subclass__(cls, **kwargs: Any_) -> None:
         super().__init_subclass__(**kwargs)
-        defined = [name for name in MISSINGS_EQUALITY if has_usermethod(cls, name)]
 
-        if not defined:
-            raise ValueError("Define at least one equality operator (==, !=).")
-
-        for name, operator in MISSINGS_EQUALITY[defined[0]].items():
-            if not has_usermethod(cls, name):
-                setattr(cls, name, operator)
+        for name in ("eq", "ne"):
+            if not has_usermethod(cls, f"__{name}__"):
+                setattr(cls, f"__{name}__", getattr(op, name))
 
 
 class TotalOrdering(Orderable):
@@ -432,39 +396,7 @@ class TotalOrdering(Orderable):
 
     def __init_subclass__(cls, **kwargs: Any_) -> None:
         super().__init_subclass__(**kwargs)
-        defined = [name for name in MISSINGS_EQUALITY if has_usermethod(cls, name)]
 
-        if not defined:
-            raise ValueError("Define at least one equality operator (==, !=).")
-
-        for name, operator in MISSINGS_EQUALITY[defined[0]].items():
-            if not has_usermethod(cls, name):
-                setattr(cls, name, operator)
-
-        defined = [name for name in MISSINGS_ORDERING if has_usermethod(cls, name)]
-
-        if not defined:
-            raise ValueError("Define at least one ordering operator (>=, >, <=, <).")
-
-        for name, operator in MISSINGS_ORDERING[defined[0]].items():
-            if not has_usermethod(cls, name):
-                setattr(cls, name, operator)
-
-
-def has_usermethod(obj: Any_, name: str, /) -> bool:
-    """Check if an object has a user-defined method with given name."""
-    return (
-        hasattr(obj, name)
-        and not is_abstractmethod(getattr(obj, name))
-        and not is_objectmethod(getattr(obj, name))
-    )
-
-
-def is_abstractmethod(method: Any_, /) -> bool:
-    """Check if given method is an abstract method."""
-    return bool(getattr(method, "__isabstractmethod__", None))
-
-
-def is_objectmethod(method: Any_, /) -> bool:
-    """Check if given method is defined in the object class."""
-    return method is getattr(object, method.__name__, None)
+        for name in ("eq", "ge", "gt", "le", "lt", "ne"):
+            if not has_usermethod(cls, f"__{name}__"):
+                setattr(cls, f"__{name}__", getattr(op, name))
