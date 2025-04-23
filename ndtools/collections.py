@@ -9,7 +9,7 @@ from typing import Any, Literal
 
 # dependencies
 import pandas as pd
-from .combination import Combinable
+from .comparable import Combinable
 from .comparison import TotalEquality, TotalOrdering
 
 
