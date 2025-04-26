@@ -5,6 +5,7 @@ __all__ = [
     "Combinable",
     "Equatable",
     "Match",
+    "Not",
     "Range",
     "Orderable",
     "comparables",
