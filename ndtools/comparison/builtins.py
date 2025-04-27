@@ -21,6 +21,7 @@ class AnyType(Combinable, Equatable):
 
     Examples:
         ::
+
             import numpy as np
             from ndtools import ANY
 
@@ -51,6 +52,7 @@ class NeverType(Combinable, Equatable):
 
     Examples:
         ::
+
             import numpy as np
             from ndtools import NEVER
 
@@ -78,6 +80,7 @@ ANY = AnyType()
 
 Examples:
     ::
+
         import numpy as np
         from ndtools import ANY
 
@@ -91,6 +94,7 @@ NEVER = NeverType()
 
 Examples:
     ::
+
         import numpy as np
         from ndtools import NEVER
 
@@ -120,8 +124,13 @@ class Apply(Combinable, Equatable):
     """
 
     func: Callable[..., Any_]
+    """Boolean function that takes ``func(array, *args, **kwargs)``."""
+
     args: Any_
+    """Positional arguments to be passed to the function."""
+
     kwargs: Any_
+    """Keyword arguments to be passed to the function."""
 
     def __init__(self, func: Callable[..., Any_], *args: Any_, **kwargs: Any_) -> None:
         super().__setattr__("func", func)
@@ -161,9 +170,16 @@ class Match(Combinable, Equatable):
     """
 
     pat: str
+    """Character sequence or regular expression."""
+
     case: bool = True
+    """If True, case sensitive matching will be performed."""
+
     flags: int = 0
+    """Regular expression flags, e.g. ``re.IGNORECASE``."""
+
     na: Any_ = None
+    """Fill value for missing values."""
 
     def __eq__(self, other: Any_) -> Any_:
         return (
@@ -205,8 +221,13 @@ class Range(Combinable, Orderable):
     """
 
     lower: Any_
+    """Lower value of the range."""
+
     upper: Any_
+    """Upper value of the range."""
+
     bounds: Literal["[]", "[)", "(]", "()"] = "[)"
+    """Type of bounds of the range."""
 
     @property
     def is_lower_open(self) -> bool:
