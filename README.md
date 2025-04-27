@@ -3,6 +3,7 @@
 [![Release](https://img.shields.io/pypi/v/ndtools?label=Release&color=cornflowerblue&style=flat-square)](https://pypi.org/project/ndtools/)
 [![Python](https://img.shields.io/pypi/pyversions/ndtools?label=Python&color=cornflowerblue&style=flat-square)](https://pypi.org/project/ndtools/)
 [![Downloads](https://img.shields.io/pypi/dm/ndtools?label=Downloads&color=cornflowerblue&style=flat-square)](https://pepy.tech/project/ndtools)
+[![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.15291176-cornflowerblue?style=flat-square)](https://doi.org/10.5281/zenodo.15291176)
 [![Tests](https://img.shields.io/github/actions/workflow/status/astropenguin/ndtools/tests.yaml?label=Tests&style=flat-square)](https://github.com/astropenguin/ndtools/actions)
 
 Collection of tools to extend multidimensional array operations
