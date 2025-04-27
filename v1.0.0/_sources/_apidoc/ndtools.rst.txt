@@ -1,0 +1,15 @@
+ndtools package
+===============
+
+.. automodule:: ndtools
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 2
+
+   ndtools.comparison

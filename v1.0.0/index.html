@@ -1,0 +1,601 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ndtools &#8212; Project name not set  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ndtools package" href="_apidoc/ndtools.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ndtools</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="#">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="_apidoc/ndtools.html">
+    Package guide
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/astropenguin/ndtools" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="#">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="_apidoc/ndtools.html">
+    Package guide
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/astropenguin/ndtools" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ndtools">
+<h1>ndtools<a class="headerlink" href="#ndtools" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://pypi.org/project/ndtools/"><img alt="Release" src="https://img.shields.io/pypi/v/ndtools?label=Release&amp;color=cornflowerblue&amp;style=flat-square" /></a>
+<a class="reference external" href="https://pypi.org/project/ndtools/"><img alt="Python" src="https://img.shields.io/pypi/pyversions/ndtools?label=Python&amp;color=cornflowerblue&amp;style=flat-square" /></a>
+<a class="reference external" href="https://pepy.tech/project/ndtools"><img alt="Downloads" src="https://img.shields.io/pypi/dm/ndtools?label=Downloads&amp;color=cornflowerblue&amp;style=flat-square" /></a>
+<a class="reference external" href="https://doi.org/10.5281/zenodo.15291176"><img alt="DOI" src="https://img.shields.io/badge/DOI-10.5281/zenodo.15291176-cornflowerblue?style=flat-square" /></a>
+<a class="reference external" href="https://github.com/astropenguin/ndtools/actions"><img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/astropenguin/ndtools/tests.yaml?label=Tests&amp;style=flat-square" /></a></p>
+<p>Collection of tools to extend multidimensional array operations</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ndtools
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<p>ndtools allows you to compare NumPy arrays, pandas Series, xarray DataArrays, and other array-like objects (often called “duck arrays”) against custom conditions in an intuitive way.
+It achieves this broad compatibility by leveraging standard protocols like <code class="docutils literal notranslate"><span class="pre">__array_ufunc__</span></code>, ensuring that the comparison logic works seamlessly across different libraries as long as they adhere to these conventions.</p>
+<section id="core-concepts">
+<h3>Core concepts<a class="headerlink" href="#core-concepts" title="Link to this heading">#</a></h3>
+<p>At its core, ndtools uses mixin classes to make your own objects comparable with these duck arrays.
+This allows you to define complex, domain-specific comparison logic that goes beyond simple value checks, while remaining compatible with the wider Python data science ecosystem.</p>
+<section id="equatable-mixin">
+<h4><code class="docutils literal notranslate"><span class="pre">Equatable</span></code> mixin<a class="headerlink" href="#equatable-mixin" title="Link to this heading">#</a></h4>
+<p>Implement <code class="docutils literal notranslate"><span class="pre">Equatable</span></code> mixin when you need custom equality logic (<code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code>).
+Simply define <code class="docutils literal notranslate"><span class="pre">__eq__</span></code> (or <code class="docutils literal notranslate"><span class="pre">__ne__</span></code>) on your class, specifying how it should compare against an array’s elements.
+ndtools leverages NumPy’s <code class="docutils literal notranslate"><span class="pre">__array_ufunc__</span></code> protocol behind the scenes, ensuring that comparisons like <code class="docutils literal notranslate"><span class="pre">array</span> <span class="pre">==</span> <span class="pre">YourClass()</span></code> and <code class="docutils literal notranslate"><span class="pre">YourClass()</span> <span class="pre">==</span> <span class="pre">array</span></code> both work seamlessly and symmetrically across compatible array types.
+Crucially, ndtools also automatically derives the missing comparison operator for you (e.g., it creates a working <code class="docutils literal notranslate"><span class="pre">__ne__</span></code> if you only provide <code class="docutils literal notranslate"><span class="pre">__eq__</span></code>), reducing boilerplate code.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ndtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Equatable</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Even</span><span class="p">(</span><span class="n">Equatable</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">array</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+
+<span class="n">Even</span><span class="p">()</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># -&gt; array([True, False, True])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">Even</span><span class="p">()</span>  <span class="c1"># -&gt; array([True, False, True])</span>
+
+<span class="n">Even</span><span class="p">()</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># -&gt; array([False, True, False])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Even</span><span class="p">()</span>  <span class="c1"># -&gt; array([False, True, False])</span>
+</pre></div>
+</div>
+</section>
+<section id="orderable-mixin">
+<h4><code class="docutils literal notranslate"><span class="pre">Orderable</span></code> mixin<a class="headerlink" href="#orderable-mixin" title="Link to this heading">#</a></h4>
+<p>For comparisons involving order (<code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>), inherit from <code class="docutils literal notranslate"><span class="pre">Orderable</span></code> mixin.
+Similar in spirit to Python’s standard library <code class="docutils literal notranslate"><span class="pre">functools.total_ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">Orderable</span></code> significantly simplifies defining ordered comparisons.
+You only need to implement one ordering method (e.g., <code class="docutils literal notranslate"><span class="pre">__gt__</span></code>) and one equality method (<code class="docutils literal notranslate"><span class="pre">__eq__</span></code> or <code class="docutils literal notranslate"><span class="pre">__ne__</span></code>).
+From this minimal definition, ndtools automatically and robustly derives all other comparison operators (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code> if needed) based on logical equivalences (e.g., <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">b</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">not</span> <span class="pre">(a</span> <span class="pre">&gt;</span> <span class="pre">b)</span></code>), again using <code class="docutils literal notranslate"><span class="pre">__array_ufunc__</span></code> for broad compatibility.
+This powerful mechanism allows you to implement custom sorting criteria or range-like checks with minimal code, while ensuring consistent behavior across all six comparison operators.
+Like <code class="docutils literal notranslate"><span class="pre">Equatable</span></code>, it ensures comparisons work symmetrically (e.g., both <code class="docutils literal notranslate"><span class="pre">array</span> <span class="pre">&gt;</span> <span class="pre">YourClass()</span></code> and <code class="docutils literal notranslate"><span class="pre">YourClass()</span> <span class="pre">&lt;</span> <span class="pre">array</span></code> work correctly).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ndtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Orderable</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Range</span><span class="p">(</span><span class="n">Orderable</span><span class="p">):</span>
+    <span class="n">lower</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">upper</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">array</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">array</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">array</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span>
+
+<span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># -&gt; array([False, True, False])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># -&gt; array([False, True, False])</span>
+
+<span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># -&gt; array([True, True, False])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># -&gt; array([True, True, False])</span>
+</pre></div>
+</div>
+</section>
+<section id="combining-comparables">
+<h4>Combining comparables<a class="headerlink" href="#combining-comparables" title="Link to this heading">#</a></h4>
+<p>Multiple comparables can be combined using standard Python logical operators.
+This applies to any comparable object inheriting from <code class="docutils literal notranslate"><span class="pre">Combinable</span></code>, including built-in comparables and primitive types.
+Use <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> (AND) for logical conjunction (all conditions must be <code class="docutils literal notranslate"><span class="pre">True</span></code>) and <code class="docutils literal notranslate"><span class="pre">|</span></code> (OR) for logical disjunction (at least one condition must be <code class="docutils literal notranslate"><span class="pre">True</span></code>).
+You can also use <code class="docutils literal notranslate"><span class="pre">Not(comparable)</span></code> to invert the result of another comparable object.
+This allows for the construction of complex, readable query expressions.
+The comparison is evaluated element-wise when the combined condition is compared against an array.
+Note that primitive types like <code class="docutils literal notranslate"><span class="pre">0</span></code> in the examples below are implicitly treated as comparable values when combined using <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> or <code class="docutils literal notranslate"><span class="pre">|</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ndtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Combinable</span><span class="p">,</span> <span class="n">Equatable</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Even</span><span class="p">(</span><span class="n">Combinable</span><span class="p">,</span> <span class="n">Equatable</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">array</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">~</span><span class="p">(</span><span class="bp">self</span> <span class="o">==</span> <span class="n">array</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Odd</span><span class="p">(</span><span class="n">Combinable</span><span class="p">,</span> <span class="n">Equatable</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">array</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">~</span><span class="p">(</span><span class="bp">self</span> <span class="o">==</span> <span class="n">array</span><span class="p">)</span>
+
+<span class="n">Even</span><span class="p">()</span> <span class="o">|</span> <span class="n">Odd</span><span class="p">()</span>  <span class="c1"># -&gt; Any([Even(), Odd()])</span>
+<span class="n">Even</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">Odd</span><span class="p">()</span>  <span class="c1"># -&gt; All([Even(), Odd()])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">Even</span><span class="p">()</span> <span class="o">|</span> <span class="n">Odd</span><span class="p">()</span>  <span class="c1"># -&gt; array([True, True, True])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">Even</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">Odd</span><span class="p">()</span>  <span class="c1"># -&gt; array([False, False, False])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">Not</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># -&gt; array([True, False, True])</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="built-in-comparables">
+<h3>Built-in comparables<a class="headerlink" href="#built-in-comparables" title="Link to this heading">#</a></h3>
+<p>ndtools provides several ready-to-use comparable objects designed for duck arrays.</p>
+<section id="any-never">
+<h4><code class="docutils literal notranslate"><span class="pre">ANY</span></code> / <code class="docutils literal notranslate"><span class="pre">NEVER</span></code><a class="headerlink" href="#any-never" title="Link to this heading">#</a></h4>
+<p>Comparison with them always evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>, respectively.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ndtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">ANY</span><span class="p">,</span> <span class="n">NEVER</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">ANY</span>  <span class="c1"># -&gt; array([True, True, True])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">NEVER</span>  <span class="c1"># -&gt; array([False, False, False])</span>
+</pre></div>
+</div>
+</section>
+<section id="match-pat-case-true-flags-0-na-none">
+<h4><code class="docutils literal notranslate"><span class="pre">Match(pat,</span> <span class="pre">case=True,</span> <span class="pre">flags=0,</span> <span class="pre">na=None)</span></code><a class="headerlink" href="#match-pat-case-true-flags-0-na-none" title="Link to this heading">#</a></h4>
+<p>Checks if string array elements fully match a regular expression pattern (uses <code class="docutils literal notranslate"><span class="pre">pandas.Series.str.fullmatch</span></code>).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ndtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Match</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;aa&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">Match</span><span class="p">(</span><span class="s2">&quot;a+&quot;</span><span class="p">)</span>  <span class="c1"># -&gt; array([True, True])</span>
+</pre></div>
+</div>
+</section>
+<section id="range-lower-upper-bounds">
+<h4><code class="docutils literal notranslate"><span class="pre">Range(lower,</span> <span class="pre">upper,</span> <span class="pre">bounds=&quot;[)&quot;)</span></code><a class="headerlink" href="#range-lower-upper-bounds" title="Link to this heading">#</a></h4>
+<p>Checks if array elements are within a specified range.
+<code class="docutils literal notranslate"><span class="pre">bounds</span></code> controls inclusivity (<code class="docutils literal notranslate"><span class="pre">[)</span></code>, <code class="docutils literal notranslate"><span class="pre">[]</span></code>, <code class="docutils literal notranslate"><span class="pre">(]</span></code>, <code class="docutils literal notranslate"><span class="pre">()</span></code>).
+Use <code class="docutils literal notranslate"><span class="pre">None</span></code> for unbounded sides.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ndtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Range</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># -&gt; array([False, True, False])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># -&gt; array([True, False, False])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># -&gt; array([False, False, True])</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">Range</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># -&gt; array([True, True, False])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># -&gt; array([False, True, True])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">Range</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># -&gt; array([True, True, True])</span>
+</pre></div>
+</div>
+</section>
+<section id="where-func-args-kwargs">
+<h4><code class="docutils literal notranslate"><span class="pre">Where(func,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code><a class="headerlink" href="#where-func-args-kwargs" title="Link to this heading">#</a></h4>
+<p>Checks if <code class="docutils literal notranslate"><span class="pre">func(array,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> for array elements.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ndtools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Where</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.char</span><span class="w"> </span><span class="kn">import</span> <span class="n">isupper</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">Where</span><span class="p">(</span><span class="n">isupper</span><span class="p">)</span>  <span class="c1"># -&gt; array([True, False])</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="_apidoc/ndtools.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ndtools package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-concepts">Core concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#equatable-mixin"><code class="docutils literal notranslate"><span class="pre">Equatable</span></code> mixin</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#orderable-mixin"><code class="docutils literal notranslate"><span class="pre">Orderable</span></code> mixin</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#combining-comparables">Combining comparables</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#built-in-comparables">Built-in comparables</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#any-never"><code class="docutils literal notranslate"><span class="pre">ANY</span></code> / <code class="docutils literal notranslate"><span class="pre">NEVER</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#match-pat-case-true-flags-0-na-none"><code class="docutils literal notranslate"><span class="pre">Match(pat,</span> <span class="pre">case=True,</span> <span class="pre">flags=0,</span> <span class="pre">na=None)</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#range-lower-upper-bounds"><code class="docutils literal notranslate"><span class="pre">Range(lower,</span> <span class="pre">upper,</span> <span class="pre">bounds="[)")</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#where-func-args-kwargs"><code class="docutils literal notranslate"><span class="pre">Where(func,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025 Akio Taniguchi.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
