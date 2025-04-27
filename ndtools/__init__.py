@@ -3,13 +3,13 @@ __all__ = [
     "NEVER",
     "All",
     "Any",
-    "Apply",
     "Combinable",
     "Equatable",
     "Match",
     "Not",
     "Range",
     "Orderable",
+    "Where",
     "comparison",
 ]
 __version__ = "0.3.0"
@@ -20,9 +20,9 @@ from . import comparison
 from .comparison.builtins import (
     ANY,
     NEVER,
-    Apply,
     Match,
     Range,
+    Where,
 )
 from .comparison.comparables import (
     All,
