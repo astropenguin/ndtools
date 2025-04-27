@@ -4,8 +4,7 @@
 cff-version: 1.2.0
 title: ndtools
 message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
+  If you use this software, please cite it using the metadata from this file.
 type: software
 authors:
   - given-names: Akio
@@ -23,7 +22,7 @@ keywords:
   - python
   - comparison
   - duck-array
-  - ndarrray
+  - ndarray
 license: MIT
 version: 1.0.0
 date-released: '2025-04-27'
