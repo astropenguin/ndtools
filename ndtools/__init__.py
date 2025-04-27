@@ -20,15 +20,15 @@ from . import comparison
 from .comparison.builtins import (
     ANY,
     NEVER,
+    Apply,
+    Match,
+    Range,
 )
-from .comparison import (
+from .comparison.comparables import (
     All,
     Any,
-    Apply,
     Combinable,
     Equatable,
     Not,
-    Match,
-    Range,
     Orderable,
 )
