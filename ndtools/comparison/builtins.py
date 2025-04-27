@@ -1,4 +1,4 @@
-__all__ = ["ANY", "NEVER", "AnyType", "Apply", "NeverType", "Match", "Range"]
+__all__ = ["ANY", "NEVER", "AnyType", "NeverType", "Match", "Range", "Where"]
 
 
 # standard library
@@ -21,6 +21,7 @@ class AnyType(Combinable, Equatable):
 
     Examples:
         ::
+
             import numpy as np
             from ndtools import ANY
 
@@ -51,6 +52,7 @@ class NeverType(Combinable, Equatable):
 
     Examples:
         ::
+
             import numpy as np
             from ndtools import NEVER
 
@@ -78,6 +80,7 @@ ANY = AnyType()
 
 Examples:
     ::
+
         import numpy as np
         from ndtools import ANY
 
@@ -91,48 +94,13 @@ NEVER = NeverType()
 
 Examples:
     ::
+
         import numpy as np
         from ndtools import NEVER
 
         np.arange(3) == NEVER  # -> array([False, False, False])
 
 """
-
-
-@dataclass(frozen=True)
-class Apply(Combinable, Equatable):
-    """Comparable that applies a boolean function for multidimensional arrays.
-
-    Args:
-        func: Boolean function that takes ``func(array, *args, **kwargs)``.
-        *args: Positional arguments to be passed to the function.
-        **kwargs: Keyword arguments to be passed to the function.
-
-    Examples:
-        ::
-
-            import numpy as np
-            from ndtools import Apply
-            from numpy.char import isupper
-
-            np.array(["A", "b"]) == Apply(isupper)  # -> array([True, False])
-
-    """
-
-    func: Callable[..., Any_]
-    args: Any_
-    kwargs: Any_
-
-    def __init__(self, func: Callable[..., Any_], *args: Any_, **kwargs: Any_) -> None:
-        super().__setattr__("func", func)
-        super().__setattr__("args", args)
-        super().__setattr__("kwargs", kwargs)
-
-    def __eq__(self, other: Any_) -> Any_:
-        return self.func(other, *self.args, **self.kwargs)
-
-    def __repr__(self) -> str:
-        return f"Apply({self.func}, *{self.args}, **{self.kwargs})"
 
 
 @dataclass(frozen=True)
@@ -161,9 +129,16 @@ class Match(Combinable, Equatable):
     """
 
     pat: str
+    """Character sequence or regular expression."""
+
     case: bool = True
+    """If True, case sensitive matching will be performed."""
+
     flags: int = 0
+    """Regular expression flags, e.g. ``re.IGNORECASE``."""
+
     na: Any_ = None
+    """Fill value for missing values."""
 
     def __eq__(self, other: Any_) -> Any_:
         return (
@@ -205,8 +180,13 @@ class Range(Combinable, Orderable):
     """
 
     lower: Any_
+    """Lower value of the range."""
+
     upper: Any_
+    """Upper value of the range."""
+
     bounds: Literal["[]", "[)", "(]", "()"] = "[)"
+    """Type of bounds of the range."""
 
     @property
     def is_lower_open(self) -> bool:
@@ -284,3 +264,44 @@ class Range(Combinable, Orderable):
 
     def __repr__(self) -> str:
         return f"{self.bounds[0]}{self.lower}, {self.upper}{self.bounds[1]}"
+
+
+@dataclass(frozen=True)
+class Where(Combinable, Equatable):
+    """Comparable that applies a boolean function for multidimensional arrays.
+
+    Args:
+        func: Boolean function that takes ``func(array, *args, **kwargs)``.
+        *args: Positional arguments to be passed to the function.
+        **kwargs: Keyword arguments to be passed to the function.
+
+    Examples:
+        ::
+
+            import numpy as np
+            from ndtools import Where
+            from numpy.char import isupper
+
+            np.array(["A", "b"]) == Where(isupper)  # -> array([True, False])
+
+    """
+
+    func: Callable[..., Any_]
+    """Boolean function that takes ``func(array, *args, **kwargs)``."""
+
+    args: Any_
+    """Positional arguments to be passed to the function."""
+
+    kwargs: Any_
+    """Keyword arguments to be passed to the function."""
+
+    def __init__(self, func: Callable[..., Any_], *args: Any_, **kwargs: Any_) -> None:
+        super().__setattr__("func", func)
+        super().__setattr__("args", args)
+        super().__setattr__("kwargs", kwargs)
+
+    def __eq__(self, other: Any_) -> Any_:
+        return self.func(other, *self.args, **self.kwargs)
+
+    def __repr__(self) -> str:
+        return f"Apply({self.func}, *{self.args}, **{self.kwargs})"

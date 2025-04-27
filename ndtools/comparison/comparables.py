@@ -18,7 +18,7 @@ from .utils import has_method
 class Combinable:
     """Implement logical operations between comparables.
 
-    Classes that inherit from this mix-in class can perform
+    Classes that inherit from this mixin class can perform
     logical operations between comparables.
     Then ``comparable_0 & comparable_1 & ...``
     will return ``All([comparable_0, comparable_1, ...])``
@@ -71,7 +71,7 @@ class Combinable:
 class Equatable:
     """Implement equality operations for multidimensional arrays.
 
-    Classes that inherit from this mix-in class
+    Classes that inherit from this mixin class
     and implement ``__eq__`` or ``__ne__`` special methods
     can perform their own equality operations on multidimensional arrays.
     These special methods should be implemented for the target array like
@@ -125,7 +125,7 @@ class Equatable:
 class Orderable:
     """Implement ordering operations for multidimensional arrays.
 
-    Classes that inherit from this mix-in base class
+    Classes that inherit from this mixin base class
     and implement both (1) ``__eq__`` or ``__ne__`` special methods
     and (2) ``__ge__``, ``__gt__``, ``__le__``, or ``__lt__`` special methods
     can perform their own ordering operations on multidimensional arrays.

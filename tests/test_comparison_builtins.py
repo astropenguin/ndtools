@@ -1,6 +1,6 @@
 # dependencies
 import numpy as np
-from ndtools import ANY, NEVER, Apply, Match, Range
+from ndtools import ANY, NEVER, Match, Range, Where
 from ndtools.comparison.builtins import AnyType, NeverType
 from numpy.char import isupper
 
@@ -16,10 +16,6 @@ def test_NEVER() -> None:
 def test_AnyType() -> None:
     assert AnyType() is AnyType()
     assert all((np.arange(3) == AnyType()) == np.array([True, True, True]))
-
-
-def test_Apply() -> None:
-    assert all((np.array(["A", "b"]) == Apply(isupper)) == np.array([True, False]))
 
 
 def test_NeverType() -> None:
@@ -149,3 +145,7 @@ def test_Range_ne() -> None:
     assert all((data != Range(None, None, "[)")) == np.array([False, False, False]))
     assert all((data != Range(None, None, "(]")) == np.array([False, False, False]))
     assert all((data != Range(None, None, "()")) == np.array([False, False, False]))
+
+
+def test_Where() -> None:
+    assert all((np.array(["A", "b"]) == Where(isupper)) == np.array([True, False]))
