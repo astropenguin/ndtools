@@ -8,6 +8,7 @@ __all__ = [
     "Not",
     "Range",
     "Orderable",
+    "builtins",
     "comparables",
     "operators",
     "utils",
@@ -22,6 +23,7 @@ from typing import Any as Any_, Literal
 
 # dependencies
 import pandas as pd
+from . import builtins
 from . import comparables
 from . import operators
 from . import utils

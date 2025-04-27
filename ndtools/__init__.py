@@ -1,4 +1,6 @@
 __all__ = [
+    "ANY",
+    "NEVER",
     "All",
     "Any",
     "Apply",
@@ -15,6 +17,10 @@ __version__ = "0.3.0"
 
 # dependencies
 from . import comparison
+from .comparison.builtins import (
+    ANY,
+    NEVER,
+)
 from .comparison import (
     All,
     Any,
