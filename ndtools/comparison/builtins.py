@@ -128,8 +128,8 @@ class Apply(Combinable, Equatable):
         super().__setattr__("args", args)
         super().__setattr__("kwargs", kwargs)
 
-    def __eq__(self, array: Any_) -> Any_:
-        return self.func(array, *self.args, **self.kwargs)
+    def __eq__(self, other: Any_) -> Any_:
+        return self.func(other, *self.args, **self.kwargs)
 
     def __repr__(self) -> str:
         return f"Apply({self.func}, *{self.args}, **{self.kwargs})"
@@ -165,9 +165,9 @@ class Match(Combinable, Equatable):
     flags: int = 0
     na: Any_ = None
 
-    def __eq__(self, array: Any_) -> Any_:
+    def __eq__(self, other: Any_) -> Any_:
         return (
-            pd.Series(array)  # type: ignore
+            pd.Series(other)  # type: ignore
             .str.fullmatch(self.pat, self.case, self.flags, self.na)
             .values
         )
@@ -178,8 +178,10 @@ class Range(Combinable, Orderable):
     """Comparable that implements equivalence with a certain range.
 
     Args:
-        lower: Lower value of the range.
-        upper: Upper value of the range.
+        lower: Lower value of the range. If ``None`` is specified,
+            then the lower value comparison will be skipped.
+        lower: Upper value of the range. If ``None`` is specified,
+            then the upper value comparison will be skipped.
         bounds: Type of bounds of the range.
             ``[]``: Lower-closed and upper-closed.
             ``[)``: Lower-closed and upper-open (default).
@@ -196,44 +198,89 @@ class Range(Combinable, Orderable):
             np.arange(3) < Range(1, 2)  # -> array([True, False, False])
             np.arange(3) > Range(1, 2)  # -> array([False, False, True])
 
+            np.arange(3) == Range(None, 2)  # -> array([True, True, False])
+            np.arange(3) == Range(1, None)  # -> array([False, True, True])
+            np.arange(3) == Range(None, None)  # -> array([True, True, True])
+
     """
 
     lower: Any_
     upper: Any_
     bounds: Literal["[]", "[)", "(]", "()"] = "[)"
 
-    def __eq__(self, array: Any_) -> Any_:
-        if self.bounds == "[]":
-            return (array >= self.lower) & (array <= self.upper)
+    @property
+    def is_lower_open(self) -> bool:
+        """Check if the lower bound is open."""
+        return self.bounds[0] == "("
 
-        if self.bounds == "[)":
-            return (array >= self.lower) & (array < self.upper)
+    @property
+    def is_lower_closed(self) -> bool:
+        """Check if the lower bound is closed."""
+        return self.bounds[0] == "["
 
-        if self.bounds == "(]":
-            return (array > self.lower) & (array <= self.upper)
+    @property
+    def is_upper_open(self) -> bool:
+        """Check if the upper bound is open."""
+        return self.bounds[1] == ")"
 
-        if self.bounds == "()":
-            return (array > self.lower) & (array < self.upper)
+    @property
+    def is_upper_closed(self) -> bool:
+        """Check if the upper bound is closed."""
+        return self.bounds[1] == "]"
 
-        raise ValueError("Bounds must be either [], [), (], or [].")
+    def __eq__(self, other: Any_) -> Any_:
+        if self.lower is None and self.upper is None:
+            return other == ANY
 
-    def __ge__(self, array: Any_) -> Any_:
-        if self.bounds == "[)" or self.bounds == "()":
-            return array < self.upper
+        if self.lower is None and self.upper is not None and self.is_upper_closed:
+            return other <= self.upper
 
-        if self.bounds == "[]" or self.bounds == "(]":
-            return array <= self.upper
+        if self.lower is None and self.upper is not None and self.is_upper_open:
+            return other < self.upper
 
-        raise ValueError("Bounds must be either [], [), (], or [].")
+        if self.lower is not None and self.upper is None and self.is_lower_closed:
+            return other >= self.lower
 
-    def __gt__(self, array: Any_) -> Any_:
-        if self.bounds == "[]" or self.bounds == "[)":
-            return array < self.lower
+        if self.lower is not None and self.upper is None and self.is_lower_open:
+            return other > self.lower
 
-        if self.bounds == "(]" or self.bounds == "()":
-            return array <= self.lower
+        if self.is_lower_closed and self.is_upper_closed:
+            return (other >= self.lower) & (other <= self.upper)
 
-        raise ValueError("Bounds must be either [], [), (], or [].")
+        if self.is_lower_closed and self.is_upper_open:
+            return (other >= self.lower) & (other < self.upper)
+
+        if self.is_lower_open and self.is_upper_closed:
+            return (other > self.lower) & (other <= self.upper)
+
+        if self.is_lower_open and self.is_upper_open:
+            return (other > self.lower) & (other < self.upper)
+
+        raise ValueError("Bounds must be either [], [), (], or ().")
+
+    def __gt__(self, other: Any_) -> Any_:
+        if self.lower is None:
+            return other == NEVER
+
+        if self.is_lower_closed:
+            return other < self.lower
+
+        if self.is_lower_open:
+            return other <= self.lower
+
+        raise ValueError("Bounds must be either [], [), (], or ().")
+
+    def __lt__(self, other: Any_) -> Any_:
+        if self.upper is None:
+            return other == NEVER
+
+        if self.is_upper_closed:
+            return other > self.upper
+
+        if self.is_upper_open:
+            return other >= self.upper
+
+        raise ValueError("Bounds must be either [], [), (], or ().")
 
     def __repr__(self) -> str:
         return f"{self.bounds[0]}{self.lower}, {self.upper}{self.bounds[1]}"
