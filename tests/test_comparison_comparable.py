@@ -4,7 +4,7 @@ from typing import Any as Any_
 
 # dependencies
 import numpy as np
-from ndtools import All, Any, Combinable, Equatable, Orderable
+from ndtools import All, Any, Combinable, Equatable, Not, Orderable
 
 
 # helper functions
@@ -61,6 +61,11 @@ def test_Equatable_ne() -> None:
     assert all((right == left) == np.array([True, False, True]))
     assert all((left != right) == ~np.array([True, False, True]))
     assert all((right != left) == ~np.array([True, False, True]))
+
+
+def test_Not() -> None:
+    assert all((np.arange(3) == Not(1)) == np.array([True, False, True]))
+    assert all((np.arange(3) != Not(1)) == np.array([False, True, False]))
 
 
 def test_Orderable_eqge() -> None:

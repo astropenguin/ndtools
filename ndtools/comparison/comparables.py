@@ -1,4 +1,4 @@
-__all__ = ["All", "Any", "Combinable", "Equatable", "Orderable"]
+__all__ = ["All", "Any", "Combinable", "Equatable", "Not", "Orderable"]
 
 
 # standard library
@@ -271,3 +271,30 @@ class Any(UserList[Any_], Combinable, Equatable):
 
     def __eq__(self, other: Any_) -> Any_:
         return reduce(or_, (other == cond for cond in self))
+
+
+class Not(Combinable, Equatable):
+    """Implement logical negation for comparables.
+
+    It should wrap a comparable like ``Not(comparable)``.
+    Then the equality operation on the target array
+    will perform like ``array != comparable``.
+
+    Examples:
+        ::
+
+            import numpy as np
+            from ndtools import Not
+
+            np.arange(3) == Not(1)  # -> array([True, False, True])
+
+    """
+
+    def __init__(self, comparable: Any_, /) -> None:
+        self.comparable = comparable
+
+    def __eq__(self, other: Any_) -> Any_:
+        return other != self.comparable
+
+    def __repr__(self) -> str:
+        return f"Not({self.comparable})"

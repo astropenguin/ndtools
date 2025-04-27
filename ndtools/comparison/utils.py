@@ -1,4 +1,4 @@
-__all__ = []
+__all__ = ["get_method", "has_method"]
 
 
 # standard library
