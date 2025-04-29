@@ -96,18 +96,13 @@ class Even(Combinable, Equatable):
     def __eq__(self, array):
         return array % 2 == 0
 
-    def __ne__(self, array):
-        return ~(self == array)
-
 class Odd(Combinable, Equatable):
     def __eq__(self, array):
         return array % 2 == 1
 
-    def __ne__(self, array):
-        return ~(self == array)
-
 Even() | Odd()  # -> Any([Even(), Odd()])
 Even() & Odd()  # -> All([Even(), Odd()])
+
 np.arange(3) == Even() | Odd()  # -> array([True, True, True])
 np.arange(3) == Even() & Odd()  # -> array([False, False, False])
 np.arange(3) == Not(1)  # -> array([True, False, True])

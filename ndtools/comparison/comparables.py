@@ -37,15 +37,9 @@ class Combinable:
                 def __eq__(self, array):
                     return array % 2 == 0
 
-                def __ne__(self, array):
-                    return ~(self == array)
-
             class Odd(Combinable, Equatable):
                 def __eq__(self, array):
                     return array % 2 == 1
-
-                def __ne__(self, array):
-                    return ~(self == array)
 
             Even() & Odd()  # -> All([Even(), Odd()])
             Even() | Odd()  # -> Any([Even(), Odd()])
@@ -218,15 +212,9 @@ class All(UserList[Any_], Combinable, Equatable):
                 def __eq__(self, array):
                     return array % 2 == 0
 
-                def __ne__(self, array):
-                    return ~(self == array)
-
             class Odd(Combinable, Equatable):
                 def __eq__(self, array):
                     return array % 2 == 1
-
-                def __ne__(self, array):
-                    return ~(self == array)
 
             Even() & Odd()  # -> All([Even(), Odd()])
             np.arange(3) == Even() & Odd()  # -> array([False, False, False])
@@ -254,15 +242,9 @@ class Any(UserList[Any_], Combinable, Equatable):
                 def __eq__(self, array):
                     return array % 2 == 0
 
-                def __ne__(self, array):
-                    return ~(self == array)
-
             class Odd(Combinable, Equatable):
                 def __eq__(self, array):
                     return array % 2 == 1
-
-                def __ne__(self, array):
-                    return ~(self == array)
 
             Even() | Odd()  # -> Any([Even(), Odd()])
             np.arange(3) == Even() | Odd()  # -> array([True, True, True])
