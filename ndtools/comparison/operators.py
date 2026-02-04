@@ -4,10 +4,8 @@ __all__ = ["eq", "ge", "gt", "le", "lt", "ne"]
 # standard library
 from typing import Any, TypeVar
 
-
 # dependencies
 from .utils import get_method
-
 
 # type hints
 T = TypeVar("T")

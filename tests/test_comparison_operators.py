@@ -2,7 +2,6 @@
 from collections.abc import Callable
 from typing import Any
 
-
 # dependencies
 import numpy as np
 from ndtools.comparison.operators import eq, ge, gt, le, lt, ne

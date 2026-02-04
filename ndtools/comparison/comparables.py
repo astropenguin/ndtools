@@ -8,7 +8,6 @@ from functools import reduce
 from operator import and_, or_
 from typing import Any as Any_
 
-
 # dependencies
 import numpy as np
 from .operators import eq, ge, gt, le, lt, ne

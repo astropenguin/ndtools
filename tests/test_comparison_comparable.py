@@ -1,7 +1,6 @@
 # standard library
 from typing import Any as Any_
 
-
 # dependencies
 import numpy as np
 from ndtools import All, Any, Combinable, Equatable, Not, Orderable

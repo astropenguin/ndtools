@@ -6,7 +6,6 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any as Any_, Literal
 
-
 # dependencies
 import pandas as pd
 from typing_extensions import Self
