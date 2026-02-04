@@ -16,12 +16,10 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: echo "tag=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
-        id: tag
       - run: uv sync --frozen
       - run: docs/build
       - uses: peaceiris/actions-gh-pages@v4
         with:
-          destination_dir: ${{ steps.tag.outputs.tag }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/_build
+          keep_files: true
