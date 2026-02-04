@@ -16,13 +16,16 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.15291176
 repository-code: 'https://github.com/astropenguin/ndtools'
-url: 'https://astropenguin.github.io/ndtools/v1.0.1'
+url: 'https://astropenguin.github.io/ndtools'
 abstract: Collection of tools to extend multidimensional array operations
 keywords:
   - python
   - comparison
   - duck-array
   - ndarray
+  - numpy
+  - pandas
+  - xarray
 license: MIT
-version: 1.0.1
-date-released: '2025-04-29'
+version: 1.1.0
+date-released: '2026-02-04'
