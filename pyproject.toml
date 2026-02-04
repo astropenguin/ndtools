@@ -3,7 +3,14 @@ name = "ndtools"
 version = "1.1.0"
 description = "Collection of tools to extend multidimensional array operations"
 readme = "README.md"
-keywords = ["comparison", "duck-array", "ndarray"]
+keywords = [
+    "comparison",
+    "duck-array",
+    "ndarray",
+    "numpy",
+    "pandas",
+    "xarray",
+]
 requires-python = ">=3.10,<3.15"
 dependencies = [
     "numpy>=2,<3",
