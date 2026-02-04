@@ -1,0 +1,18 @@
+ndtools.comparison package
+==========================
+
+.. automodule:: ndtools.comparison
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 2
+
+   ndtools.comparison.builtins
+   ndtools.comparison.comparables
+   ndtools.comparison.operators
+   ndtools.comparison.utils

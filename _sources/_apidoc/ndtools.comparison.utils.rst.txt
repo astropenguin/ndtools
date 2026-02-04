@@ -1,0 +1,7 @@
+ndtools.comparison.utils module
+===============================
+
+.. automodule:: ndtools.comparison.utils
+   :members:
+   :show-inheritance:
+   :undoc-members:

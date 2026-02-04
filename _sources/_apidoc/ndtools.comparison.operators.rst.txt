@@ -1,0 +1,7 @@
+ndtools.comparison.operators module
+===================================
+
+.. automodule:: ndtools.comparison.operators
+   :members:
+   :show-inheritance:
+   :undoc-members:
