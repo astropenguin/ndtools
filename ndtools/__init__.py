@@ -11,12 +11,13 @@ __all__ = [
     "Orderable",
     "Where",
     "comparison",
+    "statistics",
 ]
 __version__ = "1.1.0"
 
 
 # dependencies
-from . import comparison
+from . import comparison, statistics
 from .comparison.builtins import (
     ANY,
     NEVER,
