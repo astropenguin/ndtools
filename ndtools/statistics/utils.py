@@ -1,4 +1,4 @@
-__all__ = ["DuckArray", "first", "nanfirst", "mad", "nanmad"]
+__all__ = ["DuckArray", "first", "nanfirst", "last", "nanlast", "mad", "nanmad"]
 
 # standard library
 from collections.abc import Callable, Sequence
@@ -74,6 +74,59 @@ def nanfirst(
 
     def func(agg: NDArray[Any], /) -> NDArray[Any]:
         indices = np.argmax(~np.isnan(agg), axis=LAST_AXIS)[..., np.newaxis]
+        return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
+
+    return _apply(_asndarray(a), func, axis=axis, keepdims=keepdims)
+
+
+def last(
+    a: ArrayLike | DuckArray,
+    /,
+    axis: Sequence[int] | int | None = None,
+    keepdims: bool = False,
+) -> NDArray[Any] | Any:
+    """Compute the last element along the specified axis.
+
+    Args:
+        a: Input array or object that can be converted to an array.
+        axis: Axis or axes along which the last element is computed.
+        keepdims: Whether to retain the reduced axes as dimensions with size one.
+
+    Returns:
+        A new array (or scalar) holding the computed last element.
+    """
+
+    def func(agg: NDArray[Any], /) -> NDArray[Any]:
+        indices = np.full(agg.shape[:LAST_AXIS], LAST_INDEX)[..., np.newaxis]
+        return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
+
+    return _apply(_asndarray(a), func, axis=axis, keepdims=keepdims)
+
+
+def nanlast(
+    a: ArrayLike | DuckArray,
+    /,
+    axis: Sequence[int] | int | None = None,
+    keepdims: bool = False,
+) -> NDArray[Any] | Any:
+    """Compute the last element along the specified axis, ignoring NaNs.
+
+    Args:
+        a: Input array or object that can be converted to an array.
+        axis: Axis or axes along which the last non-NaN element is computed.
+        keepdims: Whether to retain the reduced axes as dimensions with size one.
+
+    Returns:
+        A new array (or scalar) holding the computed last element.
+    """
+
+    def func(agg: NDArray[Any], /) -> NDArray[Any]:
+        indices = (
+            # fmt: off
+            - np.argmax(~np.isnan(agg)[..., ::-1], LAST_AXIS)[..., np.newaxis]
+            + (agg.shape[LAST_AXIS] - 1)
+            # fmt: on
+        )
         return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
 
     return _apply(_asndarray(a), func, axis=axis, keepdims=keepdims)
@@ -156,6 +209,7 @@ def _apply(
     array: NDArray[Any],
     func: Callable[[NDArray[Any]], NDArray[Any]],
     /,
+    *,
     axis: Sequence[int] | int | None,
     keepdims: bool,
 ) -> NDArray[Any] | Any:
@@ -196,6 +250,7 @@ def _apply(
 def _meta(
     array: NDArray[Any],
     /,
+    *,
     axis: Sequence[int] | int | None = None,
 ) -> dict[str, NDArray[np.int64]]:
     """Gather axis and shape metadata required for generalized array reduction.
