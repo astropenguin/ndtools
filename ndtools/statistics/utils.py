@@ -1,8 +1,18 @@
-__all__ = ["DuckArray", "first", "nanfirst", "last", "nanlast", "mad", "nanmad"]
+__all__ = [
+    "DuckArray",
+    "first",
+    "nanfirst",
+    "last",
+    "nanlast",
+    "mad",
+    "nanmad",
+    "middle",
+    "nanmiddle",
+]
 
 # standard library
 from collections.abc import Callable, Sequence
-from typing import Any, Protocol, cast, runtime_checkable
+from typing import Any, Literal, Protocol, cast, runtime_checkable
 
 # dependencies
 import numpy as np
@@ -36,7 +46,7 @@ def first(
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
-) -> NDArray[Any] | Any:
+) -> Any:
     """Compute the first element along the specified axis.
 
     Args:
@@ -60,8 +70,13 @@ def nanfirst(
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
-) -> NDArray[Any] | Any:
+) -> Any:
     """Compute the first element along the specified axis, ignoring NaNs.
+
+    If the exact first element is NaN, the function searches towards the
+    end (right side) of the array along the given axis until the first
+    non-NaN element is found. If all elements along the specified axis
+    are NaN, the result will be NaN.
 
     Args:
         a: Input array or object that can be converted to an array.
@@ -84,7 +99,7 @@ def last(
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
-) -> NDArray[Any] | Any:
+) -> Any:
     """Compute the last element along the specified axis.
 
     Args:
@@ -108,8 +123,13 @@ def nanlast(
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
-) -> NDArray[Any] | Any:
+) -> Any:
     """Compute the last element along the specified axis, ignoring NaNs.
+
+    If the exact last element is NaN, the function searches towards the
+    beginning (left side) of the array along the given axis until the first
+    non-NaN element is found. If all elements along the specified axis
+    are NaN, the result will be NaN.
 
     Args:
         a: Input array or object that can be converted to an array.
@@ -184,6 +204,83 @@ def nanmad(
     )
 
 
+def middle(
+    a: ArrayLike | DuckArray,
+    /,
+    axis: Sequence[int] | int | None = None,
+    keepdims: bool = False,
+) -> Any:
+    """Compute the middle element along the specified axis.
+
+    If the length of the target axis is even, the left-middle element is
+    returned (e.g., the element at index 1 for an axis of length 4).
+
+    Args:
+        a: Input array or object that can be converted to an array.
+        axis: Axis or axes along which the middle element is computed.
+        keepdims: Whether to retain the reduced axes as dimensions with size one.
+
+    Returns:
+        A new array (or scalar) holding the computed middle element.
+    """
+
+    def func(agg: NDArray[Any], /) -> NDArray[Any]:
+        middle_index = (agg.shape[LAST_AXIS] - 1) // 2
+        indices = np.full(agg.shape[:LAST_AXIS], middle_index)[..., np.newaxis]
+        return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
+
+    return _apply(_asndarray(a), func, axis=axis, keepdims=keepdims)
+
+
+def nanmiddle(
+    a: ArrayLike | DuckArray,
+    /,
+    axis: Sequence[int] | int | None = None,
+    side: Literal["left", "right"] = "left",
+    keepdims: bool = False,
+) -> Any:
+    """Compute the middle element along the specified axis, ignoring NaNs.
+
+    If the length of the target axis is even, the left-middle element is
+    returned (e.g., the element at index 1 for an axis of length 4).
+    If this element is NaN, the function searches for the nearest non-NaN element.
+    The ``side`` parameter controls the direction of this search.
+    If ``side='left'``, the search proceeds towards the beginning of the array.
+    If ``side='right'``, the search proceeds towards the end of the array.
+
+    Args:
+        a: Input array or object that can be converted to an array.
+        axis: Axis or axes along which the middle non-NaN element is computed.
+        side: The direction to search for non-NaN elements.
+        keepdims: Whether to retain the reduced axes as dimensions with size one.
+
+    Returns:
+        A new array (or scalar) holding the computed middle element.
+    """
+
+    def func_left(agg: NDArray[Any], /) -> NDArray[Any]:
+        agg = agg[..., : (agg.shape[LAST_AXIS] - 1) // 2 + 1]
+        indices = (
+            # fmt: off
+            - np.argmax(~np.isnan(agg)[..., ::-1], LAST_AXIS)[..., np.newaxis]
+            + (agg.shape[LAST_AXIS] - 1)
+            # fmt: on
+        )
+        return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
+
+    def func_right(agg: NDArray[Any], /) -> NDArray[Any]:
+        agg = agg[..., (agg.shape[LAST_AXIS] - 1) // 2 :]
+        indices = np.argmax(~np.isnan(agg), axis=LAST_AXIS)[..., np.newaxis]
+        return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
+
+    if side == "left":
+        return _apply(_asndarray(a), func_left, axis=axis, keepdims=keepdims)
+    elif side == "right":
+        return _apply(_asndarray(a), func_right, axis=axis, keepdims=keepdims)
+    else:
+        raise ValueError(f"Invalid side: {side!r}. Expected 'left' or 'right'.")
+
+
 def _asndarray(a: ArrayLike | DuckArray, /) -> NDArray[Any]:
     """Safely return the input as a NumPy array or compatible DuckArray.
 
@@ -212,7 +309,7 @@ def _apply(
     *,
     axis: Sequence[int] | int | None,
     keepdims: bool,
-) -> NDArray[Any] | Any:
+) -> Any:
     """Apply a core reduction function to the trailing dimension of an array.
 
     This helper handles the boilerplate of moving the specified axes to the end,
@@ -262,14 +359,14 @@ def _meta(
     Returns:
         A dictionary containing the following keys with axis and shape metadata.
 
-        * ``'axes'``: Axes of the reduced array,
+        - ``'axes'``: Axes of the reduced array,
           assuming the reduced axes are retained.
-        * ``'axes_reduced'``: Reduced axes of the input array after reduction.
-        * ``'axes_remaining'``: Remaining axes of the input array after reduction.
-        * ``'shape'``: Shape of the reduced array,
+        - ``'axes_reduced'``: Reduced axes of the input array after reduction.
+        - ``'axes_remaining'``: Remaining axes of the input array after reduction.
+        - ``'shape'``: Shape of the reduced array,
           assuming the reduced axes are retained as dimensions with size one.
-        * ``'shape_reduced'``: Shape of the input array along the reduced axes.
-        * ``'shape_remaining'``: Shape of the input array along the remaining axes.
+        - ``'shape_reduced'``: Shape of the input array along the reduced axes.
+        - ``'shape_remaining'``: Shape of the input array along the remaining axes.
 
     """
     shape = np.array(array.shape, np.int64)
