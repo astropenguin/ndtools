@@ -17,6 +17,7 @@ from typing import Any, Literal, Protocol, cast, runtime_checkable
 
 # dependencies
 import numpy as np
+from numpy.exceptions import AxisError
 from numpy.typing import ArrayLike, NDArray
 
 # constants
@@ -379,14 +380,24 @@ def _reduce_info(
         axes_reduced = np.atleast_1d(axis).astype(np.int64)
 
     if array.ndim:
-        axes_reduced = axes_reduced % array.ndim
+        if (axes_reduced < -array.ndim).any():
+            raise AxisError(
+                f"Axis {axis!r} is out of bounds for array of dimension {array.ndim!r}"
+            )
 
-    axes_remaining = np.setdiff1d(axes, axes_reduced)
+        if (axes_reduced >= array.ndim).any():
+            raise AxisError(
+                f"Axis {axis!r} is out of bounds for array of dimension {array.ndim!r}"
+            )
+
+        axes_reduced = np.unique(axes_reduced % array.ndim)
+    else:
+        axes_reduced = np.unique(axes_reduced)
 
     return {
         "axes": axes,
         "axes_reduced": axes_reduced,
-        "axes_remaining": axes_remaining,
+        "axes_remaining": (axes_remaining := np.setdiff1d(axes, axes_reduced)),
         "shape": np.where(np.isin(axes, axes_reduced), 1, shape),
         "shape_reduced": shape[axes_reduced],
         "shape_remaining": shape[axes_remaining],
