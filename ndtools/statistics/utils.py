@@ -1,5 +1,6 @@
 __all__ = [
     "DuckArray",
+    "asduckarray",
     "first",
     "nanfirst",
     "last",
@@ -41,8 +42,29 @@ class DuckArray(Protocol):
     def shape(self) -> tuple[int, ...]: ...
 
 
+def asduckarray(array: ArrayLike | DuckArray, /) -> NDArray[Any]:
+    """Return the input as an array compatible with DuckArray.
+
+    This function avoids triggering unnecessary evaluation of lazy arrays
+    by checking for DuckArray compatibility before falling back to NumPy.
+    The result is type-cast to a ``numpy.ndarray`` to ensure compatibility
+    with downstream NumPy type hints.
+
+    Args:
+        array: Input array or object that can be converted to an array.
+
+    Returns:
+        The original object if it satisfies the DuckArray requirements,
+        or a new NumPy array otherwise.
+    """
+    if isinstance(array, DuckArray):
+        return cast(NDArray[Any], array)
+    else:
+        return np.asarray(array)
+
+
 def first(
-    a: ArrayLike | DuckArray,
+    array: ArrayLike | DuckArray,
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
@@ -50,7 +72,7 @@ def first(
     """Compute the first element along the specified axis.
 
     Args:
-        a: Input array or object that can be converted to an array.
+        array: Input array or object that can be converted to an array.
         axis: Axis or axes along which the first element is computed.
         keepdims: Whether to retain the reduced axes as dimensions with size one.
 
@@ -62,11 +84,11 @@ def first(
         indices = np.full(agg.shape[:LAST_AXIS], FIRST_INDEX)[..., np.newaxis]
         return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
 
-    return _apply(_asndarray(a), func, axis=axis, keepdims=keepdims)
+    return _reduce(asduckarray(array), func, axis=axis, keepdims=keepdims)
 
 
 def nanfirst(
-    a: ArrayLike | DuckArray,
+    array: ArrayLike | DuckArray,
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
@@ -79,7 +101,7 @@ def nanfirst(
     are NaN, the result will be NaN.
 
     Args:
-        a: Input array or object that can be converted to an array.
+        array: Input array or object that can be converted to an array.
         axis: Axis or axes along which the first non-NaN element is computed.
         keepdims: Whether to retain the reduced axes as dimensions with size one.
 
@@ -91,11 +113,11 @@ def nanfirst(
         indices = np.argmax(~np.isnan(agg), axis=LAST_AXIS)[..., np.newaxis]
         return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
 
-    return _apply(_asndarray(a), func, axis=axis, keepdims=keepdims)
+    return _reduce(asduckarray(array), func, axis=axis, keepdims=keepdims)
 
 
 def last(
-    a: ArrayLike | DuckArray,
+    array: ArrayLike | DuckArray,
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
@@ -103,7 +125,7 @@ def last(
     """Compute the last element along the specified axis.
 
     Args:
-        a: Input array or object that can be converted to an array.
+        array: Input array or object that can be converted to an array.
         axis: Axis or axes along which the last element is computed.
         keepdims: Whether to retain the reduced axes as dimensions with size one.
 
@@ -115,11 +137,11 @@ def last(
         indices = np.full(agg.shape[:LAST_AXIS], LAST_INDEX)[..., np.newaxis]
         return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
 
-    return _apply(_asndarray(a), func, axis=axis, keepdims=keepdims)
+    return _reduce(asduckarray(array), func, axis=axis, keepdims=keepdims)
 
 
 def nanlast(
-    a: ArrayLike | DuckArray,
+    array: ArrayLike | DuckArray,
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
@@ -132,7 +154,7 @@ def nanlast(
     are NaN, the result will be NaN.
 
     Args:
-        a: Input array or object that can be converted to an array.
+        array: Input array or object that can be converted to an array.
         axis: Axis or axes along which the last non-NaN element is computed.
         keepdims: Whether to retain the reduced axes as dimensions with size one.
 
@@ -149,11 +171,11 @@ def nanlast(
         )
         return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
 
-    return _apply(_asndarray(a), func, axis=axis, keepdims=keepdims)
+    return _reduce(asduckarray(array), func, axis=axis, keepdims=keepdims)
 
 
 def mad(
-    a: ArrayLike | DuckArray,
+    array: ArrayLike | DuckArray,
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
@@ -161,14 +183,14 @@ def mad(
     """Compute the median absolute deviation (MAD) along the specified axis.
 
     Args:
-        a: Input array or object that can be converted to an array.
+        array: Input array or object that can be converted to an array.
         axis: Axis or axes along which the MAD is computed.
         keepdims: Whether to retain the reduced axes as dimensions with size one.
 
     Returns:
         A new array (or scalar) holding the computed MAD.
     """
-    array = _asndarray(a)
+    array = asduckarray(array)
     median = np.median
 
     return median(
@@ -179,7 +201,7 @@ def mad(
 
 
 def nanmad(
-    a: ArrayLike | DuckArray,
+    array: ArrayLike | DuckArray,
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
@@ -187,14 +209,14 @@ def nanmad(
     """Compute the median absolute deviation (MAD) along the specified axis, ignoring NaNs.
 
     Args:
-        a: Input array or object that can be converted to an array.
+        array: Input array or object that can be converted to an array.
         axis: Axis or axes along which the MAD (ignoreing NaNs) is computed.
         keepdims: Whether to retain the reduced axes as dimensions with size one.
 
     Returns:
         A new array (or scalar) holding the computed MAD.
     """
-    array = _asndarray(a)
+    array = asduckarray(array)
     median = np.nanmedian
 
     return median(
@@ -205,7 +227,7 @@ def nanmad(
 
 
 def middle(
-    a: ArrayLike | DuckArray,
+    array: ArrayLike | DuckArray,
     /,
     axis: Sequence[int] | int | None = None,
     keepdims: bool = False,
@@ -216,7 +238,7 @@ def middle(
     returned (e.g., the element at index 1 for an axis of length 4).
 
     Args:
-        a: Input array or object that can be converted to an array.
+        array: Input array or object that can be converted to an array.
         axis: Axis or axes along which the middle element is computed.
         keepdims: Whether to retain the reduced axes as dimensions with size one.
 
@@ -229,11 +251,11 @@ def middle(
         indices = np.full(agg.shape[:LAST_AXIS], middle_index)[..., np.newaxis]
         return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
 
-    return _apply(_asndarray(a), func, axis=axis, keepdims=keepdims)
+    return _reduce(asduckarray(array), func, axis=axis, keepdims=keepdims)
 
 
 def nanmiddle(
-    a: ArrayLike | DuckArray,
+    array: ArrayLike | DuckArray,
     /,
     axis: Sequence[int] | int | None = None,
     side: Literal["left", "right"] = "left",
@@ -249,7 +271,7 @@ def nanmiddle(
     If ``side='right'``, the search proceeds towards the end of the array.
 
     Args:
-        a: Input array or object that can be converted to an array.
+        array: Input array or object that can be converted to an array.
         axis: Axis or axes along which the middle non-NaN element is computed.
         side: The direction to search for non-NaN elements.
         keepdims: Whether to retain the reduced axes as dimensions with size one.
@@ -274,35 +296,14 @@ def nanmiddle(
         return np.take_along_axis(agg, indices, LAST_AXIS).squeeze(LAST_AXIS)
 
     if side == "left":
-        return _apply(_asndarray(a), func_left, axis=axis, keepdims=keepdims)
+        return _reduce(asduckarray(array), func_left, axis=axis, keepdims=keepdims)
     elif side == "right":
-        return _apply(_asndarray(a), func_right, axis=axis, keepdims=keepdims)
+        return _reduce(asduckarray(array), func_right, axis=axis, keepdims=keepdims)
     else:
         raise ValueError(f"Invalid side: {side!r}. Expected 'left' or 'right'.")
 
 
-def _asndarray(a: ArrayLike | DuckArray, /) -> NDArray[Any]:
-    """Safely return the input as a NumPy array or compatible DuckArray.
-
-    This function avoids triggering unnecessary evaluation of lazy arrays
-    by checking for DuckArray compatibility before falling back to NumPy.
-    The result is type-cast to a ``numpy.ndarray`` to ensure compatibility
-    with downstream NumPy type hints.
-
-    Args:
-        a: Input array or object that can be converted to an array.
-
-    Returns:
-        The original object if it satisfies the DuckArray requirements,
-        or a new NumPy array otherwise.
-    """
-    if isinstance(a, DuckArray):
-        return cast(NDArray[Any], a)
-    else:
-        return np.asarray(a)
-
-
-def _apply(
+def _reduce(
     array: NDArray[Any],
     func: Callable[[NDArray[Any]], NDArray[Any]],
     /,
@@ -326,38 +327,38 @@ def _apply(
     Returns:
         A new array (or scalar) holding the reduced values.
     """
-    meta = _meta(array, axis=axis)
+    info = _reduce_info(array, axis=axis)
     reduced = func(
         np.moveaxis(
             array,
-            meta["axes_remaining"],
-            range(len(meta["axes_remaining"])),
-        ).reshape(*meta["shape_remaining"], -1)
+            info["axes_remaining"],
+            range(len(info["axes_remaining"])),
+        ).reshape(*info["shape_remaining"], -1)
     )
 
     if keepdims:
-        return reduced.reshape(meta["shape"])
+        return reduced.reshape(info["shape"])
 
-    if meta["shape_remaining"].size:
+    if info["shape_remaining"].size:
         return reduced
 
     return reduced[()]
 
 
-def _meta(
+def _reduce_info(
     array: NDArray[Any],
     /,
     *,
     axis: Sequence[int] | int | None = None,
 ) -> dict[str, NDArray[np.int64]]:
-    """Gather axis and shape metadata required for generalized array reduction.
+    """Calculate axis and shape information for generalized array reduction.
 
     Args:
-        array: Input array to extract metadata from.
+        array: Input array to extract information from.
         axis: Target axis or axes for the reduction.
 
     Returns:
-        A dictionary containing the following keys with axis and shape metadata.
+        A dictionary containing the following keys with axis and shape information.
 
         - ``'axes'``: Axes of the reduced array,
           assuming the reduced axes are retained.
